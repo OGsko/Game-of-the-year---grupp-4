@@ -10,8 +10,8 @@ Gubben rör sig längst en bana. Varje uppgift man klarar får man poäng i form
 ### Instruktioner
 1. npm init -y
 2. npm run dev
-3. Script för Typescript watch/build
-4. watch för json-server databasen.
+3. npm run ts-w (watch för Typescript. Dev gör också det via vite kommandot, men kollar inte type-check i konsollen.)
+4. npm run api (json server watch)
 
 
 ## Mappstruktur 

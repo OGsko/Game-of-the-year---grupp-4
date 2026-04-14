@@ -6,7 +6,9 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "api": "json-server --watch db.json -p 3000",
+    "ts-w": "tsc --watch --noEmit"
   },
   "devDependencies": {
     "typescript": "~6.0.2",
