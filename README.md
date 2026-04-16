@@ -3,8 +3,10 @@
 ## Gruppkontrakt:
 https://docs.google.com/document/d/194lG1zPv52gTGn9RfQ1uwQKxxCgEKobIAY4tmI_DfTU/edit?tab=t.0
 ## Spelidé 
-Ett bräde som ser ut som kursplan. Gubbe som ska ta sig över hindren. Hindren är att lösa enkla kodsnuttar typ css, html och typescript, gör man fel blir gubben arg. Man får två försök på sig. 
-Gubben rör sig längst en bana. Varje uppgift man klarar får man poäng i form av arbetslivserfarenheter i olika former som funkar som levlar.
+Man ska navigera en karaktär genom olika hinder. Dessa hinder representerar en programmeringsfråga inom HTML, CSS och javascript/typescript och med olika svårighetsgrader. 
+Om man svarar fel på frågan förlorar man 1 av 3 liv och din karaktär blir arg. Om man svarar rätt på en fråga får man poäng utifrån vad det är för svårighetsgrad frågan var på i en tregradig skala.
+
+När man får slut på liv och får game over sparas ditt slutgiltiga vid ditt namn i en scoreboard. Om du lyckas svara på alla frågor utan att förlora, kommer det utmärkas i scoreboarden och en gubbe kommer och gratulerar dig med en partyhatt.
 
 ## Hur projektet byggs och körs 
 ### Instruktioner
@@ -16,7 +18,7 @@ Gubben rör sig längst en bana. Varje uppgift man klarar får man poäng i form
 
 ## Mappstruktur 
 - SASS mapp struktur enligt 7-1 pattern.
-- Vi använder oss av src/dist för TypeScript filerna, med moduler.
+- Vi använder oss av src/dist för TypeScript filerna, med en mapp för moduler.
 - Alla bilder har vi i en image mapp.
 
 
@@ -26,5 +28,5 @@ Gubben rör sig längst en bana. Varje uppgift man klarar får man poäng i form
 
 ## Kommentering 
 - Bra kommentarer så att vi i gruppen förstår andras kod, hällre för mycket än för lite.
-- Idé: Att inte pusha upp kod med onödiga kommentarer som todos etc.
+- Att inte pusha upp kod med onödiga kommentarer som todos och liknande.
 
