@@ -16,13 +16,12 @@ När man får slut på liv och får game over sparas ditt slutgiltiga poäng vid
 ### Instruktioner
 1. npm init -y
 2. npm run dev
-3. npm run ts-w (watch för Typescript. Dev gör också det via vite kommandot, men kollar inte type-check i konsollen.)
-4. npm run api (json server watch)
+3. npm run api (json server watch)
 
 
 ## Mappstruktur 
 - SASS mapp struktur enligt 7-1 pattern.
-- Vi använder oss av src/dist för TypeScript filerna, med en mapp för moduler.
+- Vi använder oss av src för TypeScript filerna, med en mapp för moduler.
 - Alla bilder har vi i en image mapp.
 
 
