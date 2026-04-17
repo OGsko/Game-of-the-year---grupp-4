@@ -2,6 +2,10 @@
 
 ## Gruppkontrakt:
 https://docs.google.com/document/d/194lG1zPv52gTGn9RfQ1uwQKxxCgEKobIAY4tmI_DfTU/edit?tab=t.0
+
+## ER-diagram
+https://drive.google.com/file/d/1CqldWOYxUn4h-Yf58N4RTWiv2rJo2AaR/view?usp=sharing
+
 ## Spelidé 
 Man ska navigera en karaktär genom olika hinder. Dessa hinder representerar en programmeringsfråga inom HTML, CSS och javascript/typescript och med olika svårighetsgrader. 
 Om man svarar fel på frågan förlorar man 1 av 3 liv och din karaktär blir arg. Om man svarar rätt på en fråga får man poäng utifrån vad det är för svårighetsgrad frågan var på i en tregradig skala.
