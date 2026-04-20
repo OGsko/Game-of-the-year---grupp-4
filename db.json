@@ -1,0 +1,402 @@
+{
+    "questions": [
+            {
+            "id": 1,
+            "subject": "html",
+            "difficulty": "easy",
+            "question": "Fill in the missing HTML tag used for the largest heading: <___>Welcome</___>",
+            "answer": "h1"
+        },
+        {
+            "id": 2,
+            "subject": "html",
+            "difficulty": "easy",
+            "question": "Which word is displayed in bold in this HTML:",
+            "answer": "world",
+            "questionImgUrl": "./public/question-img/id2.png"
+        },
+        {
+            "id": 3,
+            "subject": "css",
+            "difficulty": "easy",
+            "question": "Fill in the missing CSS property used to set text color: p { ___: red; }",
+            "answer": "color",
+            "questionImgUrl": "./public/question-img/id3.png"
+        },
+        {
+            "id": 4,
+            "subject": "javascript",
+            "difficulty": "easy",
+            "question": "What is the exact output of this code: console.log(2 + 3);",
+            "answer": "5"
+        },
+        {
+            "id": 5,
+            "subject": "html",
+            "difficulty": "easy",
+            "question": "Fill in the missing HTML attribute that sets the destination URL of a link:",
+            "answer": "href",
+            "questionImgUrl": "./public/question-img/id5.png"
+        },
+        {
+            "id": 6,
+            "subject": "css",
+            "difficulty": "easy",
+            "question": "What color will the text become with this CSS rule:",
+            "answer": "blue",
+            "questionImgUrl": "./public/question-img/id6.png"
+        },
+        {
+            "id": 7,
+            "subject": "javascript",
+            "difficulty": "easy",
+            "question": "Fill in the missing keyword used to declare a variable that can be reassigned later:",
+            "answer": "let",
+            "questionImgUrl": "./public/question-img/id7.png"
+        },
+        {
+            "id": 8,
+            "subject": "html",
+            "difficulty": "easy",
+            "question": "Which HTML tag is specifically used to display an image on a page?",
+            "answer": "img"
+        },
+        {
+            "id": 9,
+            "subject": "css",
+            "difficulty": "easy",
+            "question": "Fill in the value that centers text horizontally: text-align: ___;",
+            "answer": "center"
+        },
+        {
+            "id": 10,
+            "subject": "javascript",
+            "difficulty": "easy",
+            "question": "What is the exact output of this code:",
+            "answer": "15",
+            "questionImgUrl": "./public/question-img/id10.png"
+        },
+        {
+            "id": 11,
+            "subject": "html",
+            "difficulty": "medium",
+            "question": "Fill in the missing HTML tag used to create an unordered list:",
+            "answer": "ul",
+            "questionImgUrl": "./public/question-img/id11.png"
+        },
+        {
+            "id": 12,
+            "subject": "css",
+            "difficulty": "medium",
+            "question": "Fill in the missing CSS property used to add space inside an element's border:",
+            "answer": "padding",
+            "questionImgUrl": "./public/question-img/id12.png"
+        },
+        {
+            "id": 13,
+            "subject": "javascript",
+            "difficulty": "medium",
+            "question": "What is the exact output of this code:",
+            "answer": "52",
+            "questionImgUrl": "./public/question-img/id13.png"
+        },
+        {
+            "id": 14,
+            "subject": "javascript",
+            "difficulty": "medium",
+            "question": "Fill in the missing arrow function syntax:",
+            "answer": "=>",
+            "questionImgUrl": "./public/question-img/id14.png"
+        },
+        {
+            "id": 15,
+            "subject": "html",
+            "difficulty": "medium",
+            "question": "Which HTML attribute provides alternative text for an image if the image cannot be displayed?",
+            "answer": "alt"
+        },
+        {
+            "id": 16,
+            "subject": "css",
+            "difficulty": "medium",
+            "question": "What is the exact background color value in this rule:",
+            "answer": "green",
+            "questionImgUrl": "./public/question-img/id16.png"
+        },
+        {
+            "id": 17,
+            "subject": "javascript",
+            "difficulty": "medium",
+            "question": "Fill in the operator used for strict equality comparison of both value and type: 5 ___ \"5\"",
+            "answer": "==="
+        },
+        {
+            "id": 18,
+            "subject": "typescript",
+            "difficulty": "medium",
+            "question": "Fill in the missing TypeScript type for this numeric variable:",
+            "answer": "number",
+            "questionImgUrl": "./public/question-img/id16.png"
+        },
+        {
+            "id": 19,
+            "subject": "html",
+            "difficulty": "medium",
+            "question": "Fill in the missing input type value used for a standard single-line text field: <input type=\"___\">",
+            "answer": "text"
+        },
+        {
+            "id": 20,
+            "subject": "css",
+            "difficulty": "medium",
+            "question": "Fill in the value that hides an element but still keeps its layout space reserved: visibility: ___;",
+            "answer": "hidden"
+        },
+        {
+            "id": 21,
+            "subject": "javascript",
+            "difficulty": "medium",
+            "question": "What is the exact output of this code:",
+            "answer": "3",
+            "questionImgUrl": "./public/question-img/id21.png"
+        },
+        {
+            "id": 22,
+            "subject": "javascript",
+            "difficulty": "medium",
+            "question": "Fill in the array method that adds an item to the end of an array:",
+            "answer": "push",
+            "questionImgUrl": "./public/question-img/id22.png"
+        },
+        {
+            "id": 23,
+            "subject": "html",
+            "difficulty": "medium",
+            "question": "Answer yes or no: Can a button with the disabled attribute be clicked by the user?",
+            "answer": "no"
+        },
+        {
+            "id": 24,
+            "subject": "css",
+            "difficulty": "medium",
+            "question": "Fill in the missing CSS property used to round the corners of an element:",
+            "answer": "border-radius",
+            "questionImgUrl": "./public/question-img/id24.png"
+        },
+        {
+            "id": 25,
+            "subject": "javascript",
+            "difficulty": "medium",
+            "question": "What is the exact output of this code:",
+            "answer": "string",
+            "questionImgUrl": "./public/question-img/id25.png"
+        },
+        {
+            "id": 26,
+            "subject": "javascript",
+            "difficulty": "hard",
+            "question": "What is the exact output of this code in JavaScript:",
+            "answer": "true",
+            "questionImgUrl": "./public/question-img/id26.png"
+        },
+        {
+            "id": 27,
+            "subject": "css",
+            "difficulty": "hard",
+            "question": "Fill in the flex-direction value that stacks flex items vertically from top to bottom:",
+            "answer": "column",
+            "questionImgUrl": "./public/question-img/id27.png"
+        },
+        {
+            "id": 28,
+            "subject": "html",
+            "difficulty": "hard",
+            "question": "Which semantic HTML tag is specifically meant for the main content of the page, excluding headers, footers, and sidebars?",
+            "answer": "main"
+        },
+        {
+            "id": 29,
+            "subject": "typescript",
+            "difficulty": "hard",
+            "question": "Fill in the TypeScript return type for a function that returns the sum of two numbers:",
+            "answer": "number",
+            "questionImgUrl": "./public/question-img/id29.png"
+        },
+        {
+            "id": 30,
+            "subject": "javascript",
+            "difficulty": "hard",
+            "question": "What is the last value printed by this code:",
+            "answer": "2",
+            "questionImgUrl": "./public/question-img/id30.png"
+        },
+        {
+            "id": 31,
+            "subject": "css",
+            "difficulty": "hard",
+            "question": "Fill in the position value that places an element relative to its nearest positioned ancestor: position: ___;",
+            "answer": "absolute"
+        },
+        {
+            "id": 32,
+            "subject": "javascript",
+            "difficulty": "hard",
+            "question": "Fill in the array method that creates a new array by transforming each item:",
+            "answer": "map",
+            "questionImgUrl": "./public/question-img/id32.png"
+        },
+        {
+            "id": 33,
+            "subject": "html",
+            "difficulty": "hard",
+            "question": "Which attribute value must match between a label and an input for them to be connected?",
+            "answer": "id"
+        },
+        {
+            "id": 34,
+            "subject": "javascript",
+            "difficulty": "hard",
+            "question": "What is the exact output of this code:",
+            "answer": "Hello",
+            "questionImgUrl": "./public/question-img/id34.png"
+        },
+        {
+            "id": 35,
+            "subject": "css",
+            "difficulty": "hard",
+            "question": "Fill in the missing CSS property that controls stacking order for positioned elements:",
+            "answer": "z-index",
+            "questionImgUrl": "./public/question-img/id35.png"
+        },
+        {
+            "id": 36,
+            "subject": "typescript",
+            "difficulty": "hard",
+            "question": "What is the exact TypeScript type of the variable in this code:",
+            "answer": "string",
+            "questionImgUrl": "./public/question-img/id36.png"
+        },
+        {
+            "id": 37,
+            "subject": "javascript",
+            "difficulty": "hard",
+            "question": "What is the exact output of this code:",
+            "answer": "1",
+            "questionImgUrl": "./public/question-img/id37.png"
+        },
+        {
+            "id": 38,
+            "subject": "html",
+            "difficulty": "easy",
+            "question": "Which HTML tag is specifically used to insert a line break inside text?",
+            "answer": "br"
+        },
+        {
+            "id": 39,
+            "subject": "css",
+            "difficulty": "easy",
+            "question": "Fill in the CSS property that sets an element's background color:",
+            "answer": "background-color",
+            "questionImgUrl": "./public/question-img/id39.png"
+        },
+        {
+            "id": 40,
+            "subject": "javascript",
+            "difficulty": "easy",
+            "question": "What is the exact output of this code: console.log(true && false);",
+            "answer": "false"
+        },
+        {
+            "id": 41,
+            "subject": "html",
+            "difficulty": "medium",
+            "question": "Which HTML tag is used to wrap form controls so they can be submitted together?",
+            "answer": "form"
+        },
+        {
+            "id": 42,
+            "subject": "css",
+            "difficulty": "medium",
+            "question": "What is the exact background color value in this rule:",
+            "answer": "black",
+            "questionImgUrl": "./public/question-img/id42.png"
+        },
+        {
+            "id": 43,
+            "subject": "javascript",
+            "difficulty": "medium",
+            "question": "Fill in the missing keyword used for the fallback branch of this conditional:",
+            "answer": "else",
+            "questionImgUrl": "./public/question-img/id43.png"
+        },
+        {
+            "id": 44,
+            "subject": "typescript",
+            "difficulty": "medium",
+            "question": "Fill in the TypeScript type used for true/false values:",
+            "answer": "boolean",
+            "questionImgUrl": "./public/question-img/id44.png"
+        },
+        {
+            "id": 45,
+            "subject": "javascript",
+            "difficulty": "medium",
+            "question": "What is the exact output of this code:",
+            "answer": "object",
+            "questionImgUrl": "./public/question-img/id45.png"
+        },
+        {
+            "id": 46,
+            "subject": "css",
+            "difficulty": "hard",
+            "question": "Fill in the CSS unit used here: .title { font-size: 2___; } This unit is relative to the root font size.",
+            "answer": "rem"
+        },
+        {
+            "id": 47,
+            "subject": "html",
+            "difficulty": "hard",
+            "question": "Which HTML attribute makes an input mandatory before a form can be submitted?",
+            "answer": "required"
+        },
+        {
+            "id": 48,
+            "subject": "javascript",
+            "difficulty": "hard",
+            "question": "What is the exact output of this code:",
+            "answer": "Sam",
+            "questionImgUrl": "./public/question-img/id48.png"
+        },
+        {
+            "id": 49,
+            "subject": "javascript",
+            "difficulty": "hard",
+            "question": "Fill in the JSON method that converts a JSON string into a JavaScript object:",
+            "answer": "parse",
+            "questionImgUrl": "./public/question-img/id49.png"
+        },
+        {
+            "id": 50,
+            "subject": "css",
+            "difficulty": "hard",
+            "question": "Answer yes or no: Will an element with display: none; be visible on the page?",
+            "answer": "no"
+        }
+    ],
+
+    "avatars": [
+        {
+            "id": 2,
+            "userName": "Bertil",
+            "imageUrl": ""
+            
+        }
+    ],
+
+    "scoreBoard": [
+        {
+            "highscore": 25000,
+            "avatarId": 1
+        }
+    ]
+}
