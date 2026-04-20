@@ -19,5 +19,18 @@
     "json-server": "^1.0.0-beta.15",
     "p5": "^2.2.3",
     "sass": "^1.99.0"
-  }
+  },
+  "description": "https://docs.google.com/document/d/194lG1zPv52gTGn9RfQ1uwQKxxCgEKobIAY4tmI_DfTU/edit?tab=t.0",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/OGsko/Game-of-the-year---grupp-4.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/OGsko/Game-of-the-year---grupp-4/issues"
+  },
+  "homepage": "https://github.com/OGsko/Game-of-the-year---grupp-4#readme"
 }
