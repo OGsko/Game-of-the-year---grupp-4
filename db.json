@@ -393,7 +393,7 @@
         }
     ],
 
-    "scoreBoard": [
+    "scoreboard": [
         {
             "highscore": 25000,
             "avatarId": 1
