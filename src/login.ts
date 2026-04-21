@@ -4,6 +4,8 @@ import { gameSketch } from './game';
 import { fetchAvatar } from './modules/fetch';
 import type { Avatar } from './interface';
 
+import { questionList} from './modules/question';
+
 export default function avatarChoise() {
     const body = document.querySelector("body");
 
@@ -28,12 +30,34 @@ export default function avatarChoise() {
     const createBtn = document.createElement("button");
     createBtn.textContent = "Create user";
 
+    //Difficulty select!------------------------------
+    const difficultyText = document.createElement("h2")
+    difficultyText.textContent = "select difficulty"
+
+    const difficultyInput = document.createElement("select");
+    const easyOpt = document.createElement("option");
+    easyOpt.value = "easy";
+    easyOpt.text = "Easy";
+    const mediumOpt = document.createElement("option");
+    mediumOpt.value = "medium";
+    mediumOpt.text = "Medium";
+    const hardOpt = document.createElement("option");
+    hardOpt.value = "hard";
+    hardOpt.text = "Hard"; 
+
+    difficultyInput.add(easyOpt)
+    difficultyInput.add(mediumOpt)
+    difficultyInput.add(hardOpt)
+    //-------------------------------------------------
+
     body?.append(avatarContainer);
-    avatarContainer.append(logInText, userNameInput, logInBtn, or, createUserText, createBtn);
+    avatarContainer.append(logInText, userNameInput, logInBtn, or, createUserText, createBtn, difficultyText, difficultyInput);
     
     logInBtn.addEventListener("click", async () => {
     const username = userNameInput.value.trim();
     if (!username) return alert("Enter your username!");
+
+    const questions = questionList(difficultyInput.value)
 
     try {
         const allUsers = await fetchAvatar(); 
@@ -60,6 +84,9 @@ export default function avatarChoise() {
 });
 
     createBtn.addEventListener("click", async () => {
+
+    const questions = questionList(difficultyInput.value)
+
     avatarContainer.replaceChildren();
 
     const createUserHeader = document.createElement("h2");

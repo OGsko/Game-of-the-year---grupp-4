@@ -1,5 +1,5 @@
 import { fetchQuestion } from "./fetch";
-
+import type { Question } from "../interface";
 
 export async function questionList (input: string) {
     const questionData = await fetchQuestion()
@@ -11,33 +11,57 @@ export async function questionList (input: string) {
     return questions
 }
 
-export function difficultySelect() {
-        const difficultyDiv = document.createElement("div")
-    
-    const difficultyText = document.createElement("h2")
-    difficultyText.textContent = "select difficulty"
+export function renderQuestion (questions: Question) {
+    const qContainer = document.createElement("div")
 
-    const difficultyInput = document.createElement("select");
-    const easyOpt = document.createElement("option");
-    easyOpt.value = "easy";
-    easyOpt.text = "Easy";
-    const mediumOpt = document.createElement("option");
-    mediumOpt.value = "medium";
-    mediumOpt.text = "Medium";
-    const hardOpt = document.createElement("option");
-    hardOpt.value = "hard";
-    hardOpt.text = "Hard"; 
+    //Fixes the correct awnser. Removes spaces and uppercase
+    const correctAnwser = questions.answer.replace(/\s+/g, "").toLocaleLowerCase()
 
-    difficultyInput.add(easyOpt)
-    difficultyInput.add(mediumOpt)
-    difficultyInput.add(hardOpt)
+    //Question/img
+    const textAndImgContainer = document.createElement("div")
 
-    difficultyDiv.appendChild(difficultyText)
-    difficultyDiv.appendChild(difficultyInput)
+    const qHeading = document.createElement("h1")
+    qHeading.textContent = `${questions.difficulty} ${questions.subject} question`
+    textAndImgContainer.appendChild(qHeading)
 
-    return difficultyDiv
+    const qText = document.createElement("h2")
+    qText.textContent = questions.question
+    textAndImgContainer.appendChild(qText)
+    if(questions.questionImgUrl) {
+        const qImg = document.createElement("img")
+        qImg.src = questions.questionImgUrl
+        qImg.alt = `Question ${questions.id} image` //Hur skriver vi ut alt om inte img laddas in?
+
+        textAndImgContainer.appendChild(qImg)
+    }
+
+    //Answer 
+    const inputAndBtnContainer = document.createElement("div")
+
+    const qAnswerInput = document.createElement("input")
+    qAnswerInput.placeholder = "Answer here!"
+    const qAnswerBtn = document.createElement("button")
+    qAnswerBtn.innerText = "Submit"
+
+    inputAndBtnContainer.appendChild(qAnswerInput)
+    inputAndBtnContainer.appendChild(qAnswerBtn)
+
+    //appending containers
+    qContainer.appendChild(textAndImgContainer)
+    qContainer.appendChild(inputAndBtnContainer)
+
+    qAnswerBtn.addEventListener("click", () => {
+        //formats the user answer like correctAnwser above
+        const userAnswer = qAnswerInput.value.replace(/\s+/g, "").toLocaleLowerCase()
+        checkAnswer(userAnswer, correctAnwser)
+    })
+
 }
 
-
-
-    //const questions = questionList(difficultyInput.value)
+function checkAnswer(userInput: string, correctInput: string) {
+    if (userInput === correctInput) {
+        //function for correct
+    } else {
+        //function for wrong
+    }
+}
