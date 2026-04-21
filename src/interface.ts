@@ -8,12 +8,12 @@ export interface Question {
 }
 
 export interface Avatar {
-    id: number,
+    id: string,
     userName: string,
     imageUrl: string
 }
 
 export interface Scoreboard {
     highscore: number,
-    avatarId: number
+    avatarId: string
 }
