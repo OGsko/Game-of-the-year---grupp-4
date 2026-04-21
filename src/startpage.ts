@@ -1,3 +1,5 @@
+import avatarChoise from "./avatar.ts";
+
 export function startPage() {
     const welcome = document.createElement("h1");
     welcome.textContent = ("Welcome");
@@ -13,6 +15,7 @@ export function startPage() {
 
     body?.append(welcome, playBtn, gameInfo);
 
-    playBtn.addEventListener("click", ()=>{// avatarfunktion
+    playBtn.addEventListener("click", ()=>{
+        avatarChoise();
     });
 }

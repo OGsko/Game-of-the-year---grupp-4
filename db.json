@@ -386,10 +386,27 @@
 
     "avatars": [
         {
-            "id": 2,
+            "id": 1,
             "userName": "Bertil",
-            "imageUrl": ""
+            "imageUrl": "avatar1.png"
             
+        },
+        {
+            "id": 2,
+            "userName": "Berit",
+            "imageUrl": "avatar2.png"
+            
+        },
+        {
+            "id": 3,
+            "userName": "Bosse",
+            "imageUrl": "avatar3.png"
+            
+        },
+        { 
+            "id": 4,
+            "userName": "Gris",
+            "imageUrl": "avatar4.png"
         }
     ],
 
