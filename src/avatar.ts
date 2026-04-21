@@ -3,6 +3,7 @@ import p5 from 'p5';
 import { gameSketch } from './game';
 import { fetchAvatar } from './modules/fetch';
 import type { Avatar } from './interface';
+import { questionList } from './modules/question';
 
 export default function avatarChoise() {
     const body = document.querySelector("body");
@@ -45,6 +46,8 @@ export default function avatarChoise() {
     const avatarChoise = document.createElement("div");
     avatarChoise.id = "avatarChoise";
 
+
+
     let selectedAvatarUrl = "";
 
     try {
@@ -76,6 +79,8 @@ export default function avatarChoise() {
     saveBtn.addEventListener("click", () => {
         if (!selectedAvatarUrl) return alert("Pick an avatar first!");
         
+
+
         body?.replaceChildren();
         const gameContainer = document.createElement("div");
         gameContainer.id = "gameContainer";

@@ -15,8 +15,9 @@ När man får slut på liv och får game over sparas ditt slutgiltiga poäng vid
 ## Hur projektet byggs och körs 
 ### Instruktioner
 1. npm init -y
-2. npm run dev
-3. npm run api (json server watch)
+2. npm install
+3. npm run dev
+4. npm run api (json server watch)
 
 
 ## Mappstruktur 
