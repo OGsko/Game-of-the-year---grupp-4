@@ -1,0 +1,13 @@
+@use "../abstracts/variables" as *;
+
+body {
+    background-color: $background-color;
+    color: rgb(236, 234, 234);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 100px;
+    gap: 20px;  
+    padding: 20px;
+}

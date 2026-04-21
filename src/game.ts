@@ -1,7 +1,8 @@
 import p5 from 'p5';
 
-export const gameSketch = (p: p5) => {
-  let headImg: p5.Image | null = null; // Behållare för img
+export const gameSketch = (chosenImg: string) => (p: p5) => {
+  let headImg: p5.Image | null = null; // Behållare för master img
+  let playerImg: p5.Image | null = null;
   let posX: number = 0; // Gubbens position i sidled (vänster/höger)
   let posY: number = 0;  // Gubbens position i höjdled (när den hoppar)
   let speed: number = 5; // Hur snabbt gubben rör sig
@@ -21,8 +22,12 @@ export const gameSketch = (p: p5) => {
     canvas.parent('gameContainer'); // Sätter in spelrutan i gameContainer
     canvas.elt.setAttribute('tabindex', '0'); // Gör att canvasen kan ta emot tangenttryck direkt
 
+    const playerPath = chosenImg.startsWith('/') ? chosenImg : `/${chosenImg}`;
+    p.loadImage(playerPath, (img) => {
+      playerImg = applyMask(img, p);
+    });
     // Kommentera bort img-sökvägen för att ta bort bilden
-    p.loadImage('/master.png.', (img) => {
+    p.loadImage('/master.png', (img) => {
       // bakom img är ansiktet maskat med vit bubbla
       const maskGraphics = p.createGraphics(img.width, img.height);
       maskGraphics.fill(255);
@@ -114,9 +119,18 @@ export const gameSketch = (p: p5) => {
     p.push();
     p.translate(p.width / 2 + posX, p.height / 2 + posY);
     p.scale(direction, 1);
-    drawCharacter(step, p.color(30, 100, 200));
+    drawCharacter(step, p.color(30, 100, 200), playerImg || undefined);;
     p.pop();
   };
+
+  function applyMask(img: p5.Image, p: p5) {
+    const mg = p.createGraphics(img.width, img.height);
+    mg.fill(255);
+    mg.noStroke();
+    mg.ellipse(img.width / 2, img.height / 2, img.width, img.height);
+    img.mask(mg as any);
+    return img;
+  }
 
   function drawCharacter(s: number, shirtColor: p5.Color, img?: p5.Image): void {
     let legLength = 150;
@@ -144,7 +158,13 @@ export const gameSketch = (p: p5) => {
     p.fill(255, 50); p.rect(-10, -5, 15, 5, 2);
     p.pop();
     
-    // Armar och kropp, p-line, sista parametern styr längden på armarna t.ex
+    // Nacke
+    p.noStroke();
+    p.fill(220, 170, 130);
+    p.rectMode(p.CENTER);
+    p.rect(0, 5, 25, 30);
+
+    // Armar och kropp
     p.stroke(220, 170, 130); 
     p.strokeWeight(12);
     p.line(-35, 20, -50, 90); 
@@ -159,10 +179,7 @@ export const gameSketch = (p: p5) => {
     if (img && img.width > 1) {
       p.push();
       p.imageMode(p.CENTER);
-      p.fill(255); 
-      p.noStroke();
-      p.circle(0, -35, 102); 
-      p.image(img, 0, -35, 102, 102); 
+      p.image(img, 0, -30, 102, 102); 
       p.pop();
     } else {
       // om img inte hittas ritas ett "vanligt" ansikte
