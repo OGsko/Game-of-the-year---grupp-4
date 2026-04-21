@@ -1,4 +1,4 @@
-export interface question {
+export interface Question {
     id: number,
     subject: string,
     difficulty: string,
@@ -7,13 +7,13 @@ export interface question {
     questionImgUrl?: string
 }
 
-export interface avatar {
+export interface Avatar {
     id: number,
     userName: string,
     imageUrl: string
 }
 
-export interface scoreboard {
+export interface Scoreboard {
     highscore: number,
     avatarId: number
 }
