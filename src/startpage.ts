@@ -1,4 +1,4 @@
-import avatarChoise from "./avatar.ts";
+import avatarChoise from "./login.ts";
 
 export function startPage() {
     const welcome = document.createElement("h1");
