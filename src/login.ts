@@ -167,7 +167,7 @@ export default function avatarChoise() {
         gameContainer.id = "gameContainer";
         body?.append(gameContainer);
 
-        // 2. Skicka med det NYA ID:t in i spelet
+        // Skickar med nya id in i spelet
         const sketchWithAvatar = gameSketch(selectedAvatarUrl, createdUser.id);
         new p5(sketchWithAvatar);
     }
