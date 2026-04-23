@@ -77,7 +77,7 @@ export default function avatarChoise() {
             gameContainer.id = "gameContainer";
             body?.append(gameContainer);
 
-            const sketchWithAvatar = gameSketch(foundUser.imageUrl);
+            const sketchWithAvatar = gameSketch(foundUser.imageUrl, foundUser.id);
             new p5(sketchWithAvatar);
             
         } else {
@@ -153,7 +153,8 @@ export default function avatarChoise() {
 
     const newUser = {
         userName: username,
-        imageUrl: selectedAvatarUrl
+        imageUrl: selectedAvatarUrl,
+        highScore: 0
     };
 
         try {
@@ -168,16 +169,18 @@ export default function avatarChoise() {
 
             if (response.ok) {
                 // Om det går att spara startar spelet
-                body?.replaceChildren();
-                const gameContainer = document.createElement("div");
-                gameContainer.id = "gameContainer";
-                body?.append(gameContainer);
+                const createdUser = await response.json(); 
 
-                const sketchWithAvatar = gameSketch(selectedAvatarUrl);
-                new p5(sketchWithAvatar);
-            } else {
-                alert("Could not save to database. Status: " + response.status);
-            }
+        body?.replaceChildren();
+        const gameContainer = document.createElement("div");
+        gameContainer.id = "gameContainer";
+        body?.append(gameContainer);
+
+        // Skickar med nya id in i spelet
+        const sketchWithAvatar = gameSketch(selectedAvatarUrl, createdUser.id);
+        new p5(sketchWithAvatar);
+    }
+    
         } catch (err) {
             console.error("Network error:", err);
             alert("Could not connect to server.");
