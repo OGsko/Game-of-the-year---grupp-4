@@ -1,6 +1,6 @@
 import p5 from 'p5';
 
-export const gameSketch = (chosenImg: string) => (p: p5) => {
+export const gameSketch = (chosenImg: string, id: string) => (p: p5) => {
   let headImg: p5.Image | null = null; // Behållare för master img
   let playerImg: p5.Image | null = null;
   let posX: number = 0; // Gubbens position i sidled (vänster/höger)
@@ -16,6 +16,12 @@ export const gameSketch = (chosenImg: string) => (p: p5) => {
   let hasJumpedOver: boolean[] = [false, false, false]; // Håller koll på om vi räknat hopp
   let jumpCount: number = 0; // Räknare för hur många laptops man hoppat över
   let gameStopped: boolean = false;  // Blir 'true' när man vinner
+  let gameStarted: boolean = false; // Blir 'true' när spelet startas
+  let lives: number = 3; // Börjar med 3 liv
+  let score: number = 0; // Spelet börjar på 0 poäng
+  let brokenLaptops: boolean[] = [false, false, false];
+  let laptopsToWin = 2;
+  let hasSaved: boolean = false;
 
   p.setup = () => {
     const canvas = p.createCanvas(600, 600); // Storlek på spelrutan
@@ -60,26 +66,64 @@ export const gameSketch = (chosenImg: string) => (p: p5) => {
     p.strokeWeight(1);
     p.line(0, p.height / 2 + 235, p.width, p.height / 2 + 235);
 
-    if (!gameStopped) {
+     if (!gameStarted) {
+      p.fill(0); // Svart textfärg
+      p.textSize(24); // Storlek på texten
+      p.textAlign(p.CENTER); // Centreras på skärmen
+      p.text("Press right arrow to start", p.width / 2, p.height / 2 + -100); // -100 flyttar texten 100 pixlar upp från mitten
+      
+      // Ritar gubben stillastående
+      p.push();
+      p.translate(p.width / 2 + posX, p.height / 2 + posY);
+      drawCharacter(0, p.color(30, 100, 200), playerImg || undefined);
+      p.pop();
+
+      if (p.keyIsDown(p.RIGHT_ARROW)) {
+        gameStarted = true;
+      }
+      return;
+    }
+
+     if (!gameStopped) {
       for (let i = 0; i < laptops.length; i++) {
         laptops[i] -= levelSpeed;
-        if (laptops[i] < p.width / 2 + posX && !hasJumpedOver[i]) {
-          jumpCount++;
+
+        let distanceX = p.abs((p.width / 2 + posX) - laptops[i]);
+
+        if (distanceX < 40 && posY > -10 && !brokenLaptops[i] && !hasJumpedOver[i]) {
+          lives -= 1;             
+          score -= 1;             
+          brokenLaptops[i] = true; 
+          laptops[i] = -100; // Skickar bort laptopen så den "pajar"
+        }
+
+        // Kollar lyckat hopp
+        if (laptops[i] < p.width / 2 + posX && !hasJumpedOver[i] && !brokenLaptops[i]) {
+          jumpCount++; 
+          score += 1;  
           hasJumpedOver[i] = true;
         }
+
+        // Återställer laptop (När den åkt ut till vänster)
         if (laptops[i] < -50) {
           laptops[i] = p.width + p.random(300, 600);
           hasJumpedOver[i] = false;
+          brokenLaptops[i] = false; 
         }
-        p.push();
-        p.translate(laptops[i], p.height / 2 + 190);
-        p.noStroke();
-        p.fill(50); p.rect(0, 0, 50, 35, 5);
-        p.fill(100, 200, 255); p.rect(5, 5, 40, 25);
-        p.fill(80); p.rect(-5, 35, 60, 10, 2);
-        p.pop();
+
+        // Ritar laptop, visas bara om den inte pajat
+        if (!brokenLaptops[i]) {
+          p.push();
+          p.translate(laptops[i], p.height / 2 + 190);
+          p.noStroke();
+          p.fill(50); p.rect(0, 0, 50, 35, 5);
+          p.fill(100, 200, 255); p.rect(5, 5, 40, 25);
+          p.fill(80); p.rect(-5, 35, 60, 10, 2);
+          p.pop();
+        }
       }
 
+      // Spelarrörelse (Höger/Vänster)
       if (p.keyIsDown(p.RIGHT_ARROW)) { posX += speed; direction = -1; step += 0.2; } 
       else if (p.keyIsDown(p.LEFT_ARROW)) { posX -= speed; direction = 1; step += 0.2; } 
       else { step = 0; }
@@ -91,11 +135,30 @@ export const gameSketch = (chosenImg: string) => (p: p5) => {
 
     posX = p.constrain(posX, -250, 80);
     
-    // jumpcount styr hur många laptops som behöver hoppas innan master dyker upp. Här 5.
-      if (jumpCount >= 5 && posY === groundY) {
+    // jumpcount styr hur många laptops som behöver hoppas innan master dyker upp
+      if (jumpCount >= laptopsToWin && posY === groundY) {
       if (!gameStopped) {
         gameStopped = true;
       }
+       
+      // skickar highscore till db, kopplas ihop med avatarId och id
+       if (!hasSaved) {
+       hasSaved = true;
+
+      const dataToSend = {
+      "highscore": score,
+      "avatarId": id,
+      "id": Date.now().toString() 
+      };
+
+    fetch('http://localhost:3000/scoreboard', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(dataToSend)
+     })
+    }
 
       p.push();
       p.translate(p.width / 2 + 150, p.height / 2 + 10);  // sista värdet styr masters position
@@ -121,6 +184,15 @@ export const gameSketch = (chosenImg: string) => (p: p5) => {
     p.scale(direction, 1);
     drawCharacter(step, p.color(30, 100, 200), playerImg || undefined);;
     p.pop();
+    
+    // Lives och score i vänstra hörnet
+    p.push();
+      p.fill(255, 0, 0); // Röd text
+      p.textSize(22);
+      p.textAlign(p.LEFT);
+      p.text(`Lives: ${"❤️".repeat(lives)}`, 20, 40);
+      p.text(`Score: ${score}`, 20, 70);
+      p.pop();
   };
 
   function applyMask(img: p5.Image, p: p5) {
