@@ -415,6 +415,11 @@
       "highscore": 25000,
       "avatarId": 1,
       "id": "1"
+    },
+    {
+      "highscore": 2,
+      "avatarId": "2",
+      "id": "CPYbCrG5GpE"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"
