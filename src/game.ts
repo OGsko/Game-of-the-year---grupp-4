@@ -1,4 +1,6 @@
 import p5 from 'p5';
+import { renderQuestion, testingTesting } from './modules/question';
+import { getSelectedQuestions } from './modules/state';
 
 export const gameSketch = (chosenImg: string) => (p: p5) => {
   let headImg: p5.Image | null = null; // Behållare för master img
@@ -95,6 +97,10 @@ export const gameSketch = (chosenImg: string) => (p: p5) => {
       if (jumpCount >= 5 && posY === groundY) {
       if (!gameStopped) {
         gameStopped = true;
+        const questions = getSelectedQuestions()
+        if (questions) {
+          renderQuestion (questions[1])
+        }
       }
 
       p.push();
@@ -113,6 +119,7 @@ export const gameSketch = (chosenImg: string) => (p: p5) => {
       p.textAlign(p.CENTER, p.CENTER);
       // texten i pratbubblan
       p.text("Hehe! To continue you need to answer this...", -35, -150, 180, 60);
+
       p.pop();
     }
 
