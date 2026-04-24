@@ -403,11 +403,6 @@
       "id": "4",
       "userName": "Gris",
       "imageUrl": "avatar4.png"
-    },
-    {
-      "userName": "Peppa",
-      "imageUrl": "avatar4.png",
-      "id": "v2h-Wvf9OCU"
     }
   ],
   "scoreboard": [
@@ -420,6 +415,101 @@
       "highscore": 2,
       "avatarId": "2",
       "id": "CPYbCrG5GpE"
+    },
+    {
+      "highscore": 2,
+      "avatarId": "v2h-Wvf9OCU",
+      "id": "6V2v8z8__KM"
+    },
+    {
+      "highscore": 2,
+      "avatarId": "v2h-Wvf9OCU",
+      "id": "PQ4gW1ZTlRk"
+    },
+    {
+      "highscore": 2,
+      "avatarId": "v2h-Wvf9OCU",
+      "id": "rqj2oSgNL1k"
+    },
+    {
+      "highscore": 0,
+      "avatarId": "v2h-Wvf9OCU",
+      "id": "mxSzEK_AN9A"
+    },
+    {
+      "highscore": 1,
+      "avatarId": "v2h-Wvf9OCU",
+      "id": "qjtqrP3WFIA"
+    },
+    {
+      "highscore": 2,
+      "avatarId": "v2h-Wvf9OCU",
+      "id": "m3Zo-8NRVBQ"
+    },
+    {
+      "highscore": 2,
+      "avatarId": "v2h-Wvf9OCU",
+      "id": "HpIrROnZi3Q"
+    },
+    {
+      "highscore": 12,
+      "avatarId": "v2h-Wvf9OCU",
+      "id": "_G2DNGk85JE"
+    },
+    {
+      "highscore": 2,
+      "avatarId": "v2h-Wvf9OCU",
+      "id": "utKobpe1atg"
+    },
+    {
+      "highscore": 2,
+      "avatarId": "v2h-Wvf9OCU",
+      "id": "nielDmLP-t8"
+    },
+    {
+      "highscore": 2,
+      "avatarId": "v2h-Wvf9OCU",
+      "id": "UDB0e60tqPo"
+    },
+    {
+      "highscore": 2,
+      "avatarId": "v2h-Wvf9OCU",
+      "id": "L3Q_NyWO_Sg"
+    },
+    {
+      "highscore": 2,
+      "avatarId": "v2h-Wvf9OCU",
+      "id": "yjrI_XglMmQ"
+    },
+    {
+      "highscore": 2,
+      "avatarId": "v2h-Wvf9OCU",
+      "id": "JdFFjv7yjMk"
+    },
+    {
+      "highscore": 2,
+      "avatarId": "4",
+      "id": "ERFQEjph500"
+    },
+    {
+      "highscore": 2,
+      "avatarId": "4",
+      "id": "89DqF9fgc0g"
+    },
+    {
+      "highscore": 2,
+      "avatarId": "4",
+      "id": "ePmsEXxs7Sk"
+    },
+    {
+      "highscore": 2,
+      "avatarId": "4",
+      "id": "Pe6XFrepubU"
+    },
+    {
+      "highscore": 2,
+      "avatarId": "4",
+      "id": "JKAbtguBjPs"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"

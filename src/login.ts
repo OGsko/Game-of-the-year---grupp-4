@@ -32,7 +32,7 @@ export default function avatarChoise() {
     const createBtn = document.createElement("button");
     createBtn.textContent = "Create user";
 
-    //Difficulty select!------------------------------
+    //Välja svårighetsgrad!------------------------------
     const difficultyText = document.createElement("h2")
     difficultyText.textContent = "select difficulty"
 
@@ -50,7 +50,7 @@ export default function avatarChoise() {
     difficultyInput.add(easyOpt)
     difficultyInput.add(mediumOpt)
     difficultyInput.add(hardOpt)
-    //-------------------------------------------------
+    //--------------------------------------------------
 
     body?.append(avatarContainer);
     avatarContainer.append(logInText, userNameInput, logInBtn, or, createUserText, createBtn, difficultyText, difficultyInput);
@@ -59,6 +59,7 @@ export default function avatarChoise() {
     const username = userNameInput.value.trim();
     if (!username) return alert("Enter your username!");
 
+    //sparar frågorna och skickar in i state.ts
     const questions = await questionList(difficultyInput.value)
     if (questions) {
         saveSelectedQuestions(questions)

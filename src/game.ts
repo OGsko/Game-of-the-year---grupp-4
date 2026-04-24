@@ -1,6 +1,7 @@
 import p5 from 'p5';
-import { renderQuestion, testingTesting } from './modules/question';
-import { getSelectedQuestions } from './modules/state';
+import { renderQuestion, scoreCount } from './modules/question';
+import { getSelectedQuestions, saveScore, getScore } from './modules/state';
+import type { Question } from './interface';
 
 export const gameSketch = (chosenImg: string, id: string) => (p: p5) => {
   let headImg: p5.Image | null = null; // Behållare för master img
@@ -24,6 +25,8 @@ export const gameSketch = (chosenImg: string, id: string) => (p: p5) => {
   let brokenLaptops: boolean[] = [false, false, false];
   let laptopsToWin = 2;
   let hasSaved: boolean = false;
+  let waitingForAnswer: boolean = false;
+  let answerSubmitted: boolean = false;
 
   p.setup = () => {
     const canvas = p.createCanvas(600, 600); // Storlek på spelrutan
@@ -141,12 +144,18 @@ export const gameSketch = (chosenImg: string, id: string) => (p: p5) => {
       if (jumpCount >= laptopsToWin && posY === groundY) {
       if (!gameStopped) {
         gameStopped = true;
+        waitingForAnswer = true
+        //Tar korrekta frågorna och kallar på hanterings funktionen.
+        //(Se nedan kommentar för handleQuestion)
         const questions = getSelectedQuestions()
         if (questions) {
-          renderQuestion (questions[1])
+          saveScore(score) //sparar den nuvarande scoren i state.ts
+          //Skickar nu bara in index 0 för utveckling. Ska ändras till dynamiskt värde 
+          //när det är den logiken är på plats!
+          handleQuestion(questions[0]) 
         }
       }
-       
+
       // skickar highscore till db, kopplas ihop med avatarId och id
        if (!hasSaved) {
        hasSaved = true;
@@ -274,5 +283,12 @@ export const gameSketch = (chosenImg: string, id: string) => (p: p5) => {
       p.fill(80, 50, 20); p.arc(0, -45, 95, 80, p.PI, 0); 
       p.pop();
     }
+  }
+//Denna funktion kallar på renderQuestion så det rendreras ut och väntar på return
+//från render funktionen för att sedan uppdatera score variabeln. 
+  async function handleQuestion(question: Question) {
+    await renderQuestion(question)
+    const newScore = getScore()
+    score = newScore 
   }
 };
