@@ -3,8 +3,10 @@ import p5 from 'p5';
 import { gameSketch } from './game';
 import { fetchAvatar } from './modules/fetch';
 import type { Avatar } from './interface';
+import type { Question } from './interface';
 
-import { questionList} from './modules/question';
+import { questionList, renderQuestion} from './modules/question';
+import { saveSelectedQuestions } from './modules/state';
 
 export default function avatarChoise() {
     const body = document.querySelector("body");
@@ -30,7 +32,7 @@ export default function avatarChoise() {
     const createBtn = document.createElement("button");
     createBtn.textContent = "Create user";
 
-    //Difficulty select!------------------------------
+    //Välja svårighetsgrad!------------------------------
     const difficultyText = document.createElement("h2")
     difficultyText.textContent = "select difficulty"
 
@@ -48,7 +50,7 @@ export default function avatarChoise() {
     difficultyInput.add(easyOpt)
     difficultyInput.add(mediumOpt)
     difficultyInput.add(hardOpt)
-    //-------------------------------------------------
+    //--------------------------------------------------
 
     body?.append(avatarContainer);
     avatarContainer.append(logInText, userNameInput, logInBtn, or, createUserText, createBtn, difficultyText, difficultyInput);
@@ -57,7 +59,11 @@ export default function avatarChoise() {
     const username = userNameInput.value.trim();
     if (!username) return alert("Enter your username!");
 
-    const questions = questionList(difficultyInput.value)
+    //sparar frågorna och skickar in i state.ts
+    const questions = await questionList(difficultyInput.value)
+    if (questions) {
+        saveSelectedQuestions(questions)
+    }
 
     try {
         const allUsers = await fetchAvatar(); 
@@ -85,7 +91,11 @@ export default function avatarChoise() {
 
     createBtn.addEventListener("click", async () => {
 
-    const questions = questionList(difficultyInput.value)
+    //Sparar frågorna i state.ts
+    const questions = await questionList(difficultyInput.value)
+    if (questions) {
+        saveSelectedQuestions(questions)
+    }
 
     avatarContainer.replaceChildren();
 
