@@ -37,4 +37,8 @@ export function getCurrentQuestionIndex() {
     return currentQuestionIndex
 }
 
+export function updateQuestionIndex(index: number) {
+    currentQuestionIndex = index
+}
+
 //-------------------------------------------------------------

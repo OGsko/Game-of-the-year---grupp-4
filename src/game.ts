@@ -1,6 +1,6 @@
 import p5 from 'p5';
 import { renderQuestion, scoreCount } from './modules/question';
-import { getSelectedQuestions, saveScore, getScore, getCurrentQuestionIndex } from './modules/state';
+import { getSelectedQuestions, saveScore, getScore, getCurrentQuestionIndex, updateQuestionIndex } from './modules/state';
 import type { Question } from './interface';
 import { shakeScreen } from './effects';
 import { drawGameOver } from './gameover';
@@ -90,6 +90,7 @@ export const gameSketch = (chosenImg: string, id: string, scoreRowId?: string) =
       gameStopped = false;
       waitingForAnswer = false;
       isHandlingQuestion = false;
+      updateQuestionIndex(0)
     });
     return;
   }

@@ -107,7 +107,7 @@ export function checkAnswer(userInput: string, correctInput: string) {
         //Variabler för jämförelse
         const questions = getSelectedQuestions()
         const currentIndex = getCurrentQuestionIndex()
-
+        console.log("questions answerd:", currentIndex)
         //Kollar index om man svarat på varje fråga
         if (currentIndex >= 10) {
             winState()
