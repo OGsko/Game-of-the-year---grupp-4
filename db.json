@@ -407,109 +407,19 @@
   ],
   "scoreboard": [
     {
-      "highscore": 25000,
-      "avatarId": 1,
-      "id": "1"
-    },
-    {
-      "highscore": 2,
-      "avatarId": "2",
-      "id": "CPYbCrG5GpE"
-    },
-    {
-      "highscore": 2,
-      "avatarId": "v2h-Wvf9OCU",
-      "id": "6V2v8z8__KM"
-    },
-    {
-      "highscore": 2,
-      "avatarId": "v2h-Wvf9OCU",
-      "id": "PQ4gW1ZTlRk"
-    },
-    {
-      "highscore": 2,
-      "avatarId": "v2h-Wvf9OCU",
-      "id": "rqj2oSgNL1k"
-    },
-    {
+      "avatarId": "1",
       "highscore": 0,
-      "avatarId": "v2h-Wvf9OCU",
-      "id": "mxSzEK_AN9A"
+      "id": "88lcAjqtkrg"
     },
     {
-      "highscore": 1,
-      "avatarId": "v2h-Wvf9OCU",
-      "id": "qjtqrP3WFIA"
-    },
-    {
-      "highscore": 2,
-      "avatarId": "v2h-Wvf9OCU",
-      "id": "m3Zo-8NRVBQ"
-    },
-    {
-      "highscore": 2,
-      "avatarId": "v2h-Wvf9OCU",
-      "id": "HpIrROnZi3Q"
-    },
-    {
+      "avatarId": "3",
       "highscore": 12,
-      "avatarId": "v2h-Wvf9OCU",
-      "id": "_G2DNGk85JE"
+      "id": "ijcdc1Zt-Sk"
     },
     {
+      "avatarId": "2",
       "highscore": 2,
-      "avatarId": "v2h-Wvf9OCU",
-      "id": "utKobpe1atg"
-    },
-    {
-      "highscore": 2,
-      "avatarId": "v2h-Wvf9OCU",
-      "id": "nielDmLP-t8"
-    },
-    {
-      "highscore": 2,
-      "avatarId": "v2h-Wvf9OCU",
-      "id": "UDB0e60tqPo"
-    },
-    {
-      "highscore": 2,
-      "avatarId": "v2h-Wvf9OCU",
-      "id": "L3Q_NyWO_Sg"
-    },
-    {
-      "highscore": 2,
-      "avatarId": "v2h-Wvf9OCU",
-      "id": "yjrI_XglMmQ"
-    },
-    {
-      "highscore": 2,
-      "avatarId": "v2h-Wvf9OCU",
-      "id": "JdFFjv7yjMk"
-    },
-    {
-      "highscore": 2,
-      "avatarId": "4",
-      "id": "ERFQEjph500"
-    },
-    {
-      "highscore": 2,
-      "avatarId": "4",
-      "id": "89DqF9fgc0g"
-    },
-    {
-      "highscore": 2,
-      "avatarId": "4",
-      "id": "ePmsEXxs7Sk"
-    },
-    {
-      "highscore": 2,
-      "avatarId": "4",
-      "id": "Pe6XFrepubU"
-    },
-    {
-      "highscore": 2,
-      "avatarId": "4",
-      "id": "JKAbtguBjPs"
+      "id": "uKWkEZr9Z4U"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"

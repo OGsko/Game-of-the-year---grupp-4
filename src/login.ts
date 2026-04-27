@@ -1,7 +1,6 @@
-
 import p5 from 'p5';
 import { gameSketch } from './game';
-import { fetchAvatar } from './modules/fetch';
+import { fetchAvatar, fetchScoreBoard } from './modules/fetch';
 import type { Avatar } from './interface';
 import type { Question } from './interface';
 
@@ -12,7 +11,7 @@ export default function avatarChoise() {
     const body = document.querySelector("body");
 
     body?.replaceChildren();
-    
+
     const avatarContainer = document.createElement("div");
     avatarContainer.id = "avatarContainer";
 
@@ -22,7 +21,7 @@ export default function avatarChoise() {
     const userNameInput = document.createElement("input");
     userNameInput.placeholder = "Username";
     const logInBtn = document.createElement("button");
-    logInBtn.textContent = "Login"
+    logInBtn.textContent = "Login";
 
     const or = document.createElement("p");
     or.textContent = "Or";
@@ -54,138 +53,167 @@ export default function avatarChoise() {
 
     body?.append(avatarContainer);
     avatarContainer.append(logInText, userNameInput, logInBtn, or, createUserText, createBtn, difficultyText, difficultyInput);
-    
+
+    // Loggar in om användare finns
     logInBtn.addEventListener("click", async () => {
-    const username = userNameInput.value.trim();
-    if (!username) return alert("Enter your username!");
+        const username = userNameInput.value.trim();
+        if (!username) return alert("Enter your username!");
 
     //sparar frågorna och skickar in i state.ts
     const questions = await questionList(difficultyInput.value)
-    if (questions) {
+        if (questions) {
         saveSelectedQuestions(questions)
-    }
-
-    try {
-        const allUsers = await fetchAvatar(); 
-        const foundUser = allUsers?.find((user: Avatar) => 
-            user.userName?.toLowerCase() === username.toLowerCase()
-        );
-
-        if (foundUser) {
-            // Om användaren finns, gå direkt till spelet med sparad avatar
-            body?.replaceChildren();
-            const gameContainer = document.createElement("div");
-            gameContainer.id = "gameContainer";
-            body?.append(gameContainer);
-
-            const sketchWithAvatar = gameSketch(foundUser.imageUrl, foundUser.id);
-            new p5(sketchWithAvatar);
-            
-        } else {
-            alert("Could not find username");
         }
-    } catch (err) {
-        console.error("Error:", err);
-    }
-});
 
+        try {
+            const allUsers = await fetchAvatar();
+            const allScores = await fetchScoreBoard();
+
+            const foundUser = allUsers?.find((user: Avatar) =>
+                user.userName?.toLowerCase() === username.toLowerCase()
+            );
+
+            if (foundUser) {
+    let userHighscore = allScores?.find((score: any) => score.avatarId === foundUser.id);
+
+    // Om användaren finns men inte har ett highscore skapas ett på 0
+    if (!userHighscore) {
+        const newScoreResponse = await fetch("http://localhost:3000/scoreboard", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                avatarId: foundUser.id,
+                highscore: 0
+            })
+        });
+        userHighscore = await newScoreResponse.json();
+    }
+
+    const currentScore = userHighscore?.highscore || 0;
+                console.log(`Welcome ${username}! Highscore: ${currentScore}`);
+
+                body?.replaceChildren();
+                const gameContainer = document.createElement("div");
+                gameContainer.id = "gameContainer";
+                body?.append(gameContainer);
+
+                // Starta spelet
+                const sketchWithAvatar = gameSketch(foundUser.imageUrl, foundUser.id, userHighscore?.id);
+                new p5(sketchWithAvatar);
+            } else {
+                alert("Could not find username");
+            }
+        } catch (err) {
+            console.error("Error logging in:", err);
+        }
+    });
+
+    // Skapar ny användare
     createBtn.addEventListener("click", async () => {
 
     //Sparar frågorna i state.ts
     const questions = await questionList(difficultyInput.value)
-    if (questions) {
-        saveSelectedQuestions(questions)
-    }
+        if (questions) {
+            saveSelectedQuestions(questions);
+        }
 
-    avatarContainer.replaceChildren();
+        avatarContainer.replaceChildren();
 
-    const createUserHeader = document.createElement("h2");
-    createUserHeader.textContent = "Create a username";
-    const createUserInput = document.createElement("input");
-    createUserInput.placeholder = "Username";
-    
-    const avatarChoiseText = document.createElement("h2");
-    avatarChoiseText.textContent = "Pick an Avatar";
-    
+        const createUserHeader = document.createElement("h2");
+        createUserHeader.textContent = "Create a username";
+        const createUserInput = document.createElement("input");
+        createUserInput.placeholder = "Username";
+
+        const avatarChoiseText = document.createElement("h2");
+        avatarChoiseText.textContent = "Pick an Avatar";
+
     const avatarChoise = document.createElement("div");
     avatarChoise.id = "avatarChoise";
 
-    let selectedAvatarUrl = "";
+        let selectedAvatarUrl = "";
 
-   try {
-    const avatarData = await fetchAvatar();
+        try {
+            const avatarData = await fetchAvatar();
 
-    if (avatarData && avatarData.length > 0) {
+            if (avatarData && avatarData.length > 0) {
         // Slice för att bara visa de 4 första img när man väljer avatar
-        avatarData.slice(0, 4).forEach((avatar: Avatar) => {
-            const img = document.createElement("img");
+                avatarData.slice(0, 4).forEach((avatar: Avatar) => {
+                    const img = document.createElement("img");
             
-            img.src = avatar.imageUrl; 
-            img.alt = avatar.userName || "avatar";
-            img.className = "avatarOption";
+                    img.src = avatar.imageUrl;
+                    img.alt = avatar.userName || "avatar";
+                    img.className = "avatarOption";
 
-            img.addEventListener("click", () => {
-                document.querySelectorAll(".avatarOption").forEach(i => i.classList.remove("selected"));
-                img.classList.add("selected");
-                selectedAvatarUrl = avatar.imageUrl;
-            });
+                    img.addEventListener("click", () => {
+                        document.querySelectorAll(".avatarOption").forEach(i => i.classList.remove("selected"));
+                        img.classList.add("selected");
+                        selectedAvatarUrl = avatar.imageUrl;
+                    });
 
             avatarChoise.append(img);
-        });
-    } else {
+                });
+            } else {
         avatarChoise.textContent = "No avatars available";
-    }
+            }
     
-} catch (err) {
-    console.error("Could not get avatars:", err);
+        } catch (err) {
+            console.error("Could not get avatars:", err);
     avatarChoise.textContent = "Images could not load.";
-}
+        }
 
-    const saveBtn = document.createElement("button");
-    saveBtn.textContent = "Save & Play";
+        const saveBtn = document.createElement("button");
+        saveBtn.textContent = "Save & Play";
 
     avatarContainer.append(createUserHeader, createUserInput, avatarChoiseText, avatarChoise, saveBtn);
 
-    saveBtn.addEventListener("click", async () => {
-        const username = createUserInput.value.trim();
+         saveBtn.addEventListener("click", async () => {
+            const username = createUserInput.value.trim();
         
-        if (!username) return alert("Please enter a username!");
-        if (!selectedAvatarUrl) return alert("Pick an avatar first!");
+            if (!username) return alert("Please enter a username!");
+            if (!selectedAvatarUrl) return alert("Pick an avatar first!");
 
-    const newUser = {
-        userName: username,
-        imageUrl: selectedAvatarUrl,
-        highScore: 0
-    };
+            const newUser = {
+                userName: username,
+                imageUrl: selectedAvatarUrl
+            };
 
-        try {
-            // Post för att skapa en ny användare
-            const response = await fetch("http://localhost:3000/avatars", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(newUser)
-            });
+            try {
+                // Skapar den nya användaren
+                const response = await fetch("http://localhost:3000/avatars", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(newUser)
+                });
 
-            if (response.ok) {
-                // Om det går att spara startar spelet
-                const createdUser = await response.json(); 
+                if (response.ok) {
+                    const createdUser = await response.json();
 
-        body?.replaceChildren();
-        const gameContainer = document.createElement("div");
-        gameContainer.id = "gameContainer";
-        body?.append(gameContainer);
+                    // Skapr scoreboard-posten och sparar i scoreResponse
+                    const scoreResponse = await fetch("http://localhost:3000/scoreboard", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({
+                            avatarId: createdUser.id,
+                            highscore: 0
+                        })
+                    });
 
-        // Skickar med nya id in i spelet
-        const sketchWithAvatar = gameSketch(selectedAvatarUrl, createdUser.id);
-        new p5(sketchWithAvatar);
-    }
-    
-        } catch (err) {
-            console.error("Network error:", err);
-            alert("Could not connect to server.");
-        }
-    });
-})
+                    // Hämtar datan och det nya idt från scoreboard
+                    const newScoreData = await scoreResponse.json();
+                    
+                    body?.replaceChildren();
+                    const gameContainer = document.createElement("div");
+                    gameContainer.id = "gameContainer";
+                    body?.append(gameContainer);
+
+                    // Skickar med både avatarId och  score-idt till spelet
+                    const sketchWithAvatar = gameSketch(selectedAvatarUrl, createdUser.id, newScoreData.id);
+                    new p5(sketchWithAvatar);
+                }
+            } catch (err) {
+                console.error("Network error:", err);
+                alert("Could not connect to server.");
+            }
+        });
+    })
 }
