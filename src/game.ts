@@ -3,7 +3,7 @@ import { renderQuestion, scoreCount } from './modules/question';
 import { getSelectedQuestions, saveScore, getScore } from './modules/state';
 import type { Question } from './interface';
 
-export const gameSketch = (chosenImg: string, id: string) => (p: p5) => {
+export const gameSketch = (chosenImg: string, id: string, scoreRowId?: string) => (p: p5) => {
   let headImg: p5.Image | null = null; // Behållare för master img
   let playerImg: p5.Image | null = null;
   let posX: number = 0; // Gubbens position i sidled (vänster/höger)
@@ -156,24 +156,33 @@ export const gameSketch = (chosenImg: string, id: string) => (p: p5) => {
         }
       }
 
-      // skickar highscore till db, kopplas ihop med avatarId och id
-       if (!hasSaved) {
-       hasSaved = true;
+     if (!hasSaved && scoreRowId) {
+    hasSaved = true;
 
-      const dataToSend = {
-      "highscore": score,
-      "avatarId": id,
-      "id": Date.now().toString() 
-      };
-
-    fetch('http://localhost:3000/scoreboard', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(dataToSend)
-     })
-    }
+    fetch(`http://localhost:3000/scoreboard/${scoreRowId}`)
+      .then(res => res.json())
+      .then(async (currentEntry) => {
+        
+        // Spara bara om det är nytt rekord
+        if (score > currentEntry.highscore) {
+          console.log(`Nytt rekord! Uppdaterar rad ${scoreRowId} med poäng: ${score}`);
+          
+          await fetch(`http://localhost:3000/scoreboard/${scoreRowId}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              avatarId: id,
+              highscore: score,
+              id: scoreRowId 
+            })
+          });
+        }
+      })
+      .catch(err => {
+        console.error("Could not update points:", err);
+        hasSaved = false; // Tillåt nytt försök om det sket sig
+      });
+  }
 
       p.push();
       p.translate(p.width / 2 + 150, p.height / 2 + 10);  // sista värdet styr masters position
@@ -287,8 +296,12 @@ export const gameSketch = (chosenImg: string, id: string) => (p: p5) => {
 //Denna funktion kallar på renderQuestion så det rendreras ut och väntar på return
 //från render funktionen för att sedan uppdatera score variabeln. 
   async function handleQuestion(question: Question) {
-    await renderQuestion(question)
-    const newScore = getScore()
-    score = newScore 
+  await renderQuestion(question);
+  const newScore = getScore();
+  
+  if (newScore > score) {
+    score = newScore;
+    hasSaved = false;
   }
+}
 };

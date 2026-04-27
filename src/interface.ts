@@ -15,5 +15,6 @@ export interface Avatar {
 
 export interface Scoreboard {
     highscore: number,
-    avatarId: string
+    avatarId: string,
+    id: string
 }
