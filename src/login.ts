@@ -188,7 +188,7 @@ export default function avatarChoise() {
                 if (response.ok) {
                     const createdUser = await response.json();
 
-                    // Skapr scoreboard-posten och sparar i scoreResponse
+                    // Skapar scoreboard-posten och sparar i scoreResponse
                     const scoreResponse = await fetch("http://localhost:3000/scoreboard", {
                         method: "POST",
                         headers: { "Content-Type": "application/json" },
