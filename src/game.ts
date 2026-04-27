@@ -2,6 +2,14 @@ import p5 from 'p5';
 import { renderQuestion, scoreCount } from './modules/question';
 import { getSelectedQuestions, saveScore, getScore, getCurrentQuestionIndex } from './modules/state';
 import type { Question } from './interface';
+import { shakeScreen } from './effects';
+import { drawGameOver } from './gameover';
+import { drawResetButton, getResetSettings } from './resetGame';
+
+const clearQuestion = () => {
+  const qContainer = document.querySelector(".question-container");
+  if (qContainer) qContainer.remove();
+};
 
 export const gameSketch = (chosenImg: string, id: string, scoreRowId?: string) => (p: p5) => {
   let headImg: p5.Image | null = null; // Behållare för master img
@@ -27,6 +35,12 @@ export const gameSketch = (chosenImg: string, id: string, scoreRowId?: string) =
   let hasSaved: boolean = false;
   let waitingForAnswer: boolean = false;
   let isHandlingQuestion : boolean = false;
+  let isGameOver: boolean = false;
+  let isShaking: boolean = false;
+  let shakeTimer: number = 0;
+  let masterMood: 'neutral' | 'disappointed' = 'neutral';
+  let initialScore: number = 0;
+  let masterMessage = "Hehe! To continue you need to answer this...";
 
   p.setup = () => {
     const canvas = p.createCanvas(600, 600); // Storlek på spelrutan
@@ -58,6 +72,34 @@ export const gameSketch = (chosenImg: string, id: string, scoreRowId?: string) =
   };
 
  p.draw = () => {
+
+  // Återställer allt om liven är slut
+  if (lives <= 0) {
+    p.resetMatrix();
+    drawGameOver(p, () => {
+       clearQuestion();
+      masterMood = 'neutral';
+      masterMessage = "Hehe! To continue you need to answer this...";
+      lives = 3;
+      score = initialScore;
+      jumpCount = 0;
+      posX = 0;
+      laptops = [600, 1000, 1400];
+      brokenLaptops = [false, false, false];
+      hasJumpedOver = [false, false, false];
+      gameStopped = false;
+      waitingForAnswer = false;
+      isHandlingQuestion = false;
+    });
+    return;
+  }
+    // skärmen skakar om man svarar fel i effects.ts
+  if (isShaking && shakeTimer > 0) {
+      shakeScreen(p);
+      shakeTimer--;
+    } else {
+      isShaking = false;
+    }
     // färg på "himlen"
     p.background(135, 206, 235); 
 
@@ -84,6 +126,7 @@ export const gameSketch = (chosenImg: string, id: string, scoreRowId?: string) =
       p.pop();
 
       if (p.keyIsDown(p.RIGHT_ARROW)) {
+        initialScore = Number(getScore()) || 0;
         gameStarted = true;
       }
       return;
@@ -107,6 +150,7 @@ export const gameSketch = (chosenImg: string, id: string, scoreRowId?: string) =
           jumpCount++; 
           score += 1;  
           hasJumpedOver[i] = true;
+          hasSaved = false;
         }
 
         // Återställer laptop (När den åkt ut till vänster)
@@ -146,6 +190,8 @@ export const gameSketch = (chosenImg: string, id: string, scoreRowId?: string) =
         gameStopped = true;
         waitingForAnswer = true
         isHandlingQuestion = true
+        masterMood = 'neutral';
+        masterMessage = "Hehe! To continue you need to answer this...";
         //Tar korrekta frågorna och kallar på hanterings funktionen.
         //(Se nedan kommentar för handleQuestion)
         const questions = getSelectedQuestions()
@@ -181,6 +227,14 @@ export const gameSketch = (chosenImg: string, id: string, scoreRowId?: string) =
         console.error("Could not update points:", err);
         hasSaved = false; // Tillåt nytt försök om det sket sig
       });
+
+      if (masterMood === 'disappointed') {
+          p.noFill();
+          p.stroke(0);
+          p.strokeWeight(2);
+          p.arc(0, -15, 20, 10, p.PI, 0); // Ledsen mun
+      }
+      
   }
 
       p.push();
@@ -194,12 +248,9 @@ export const gameSketch = (chosenImg: string, id: string, scoreRowId?: string) =
       p.fill(255); p.stroke(0); p.strokeWeight(2);
       p.rect(-35, -150, 180, 60, 10); 
       p.triangle(10, -90, 30, -90, 20, -75);
-      
       p.noStroke(); p.fill(0); p.textSize(14);
       p.textAlign(p.CENTER, p.CENTER);
-      // texten i pratbubblan
-      p.text("Hehe! To continue you need to answer this...", -35, -150, 180, 60);
-
+      p.text(masterMessage, -35, -150, 180, 60); 
       p.pop();
     }
 
@@ -214,10 +265,36 @@ export const gameSketch = (chosenImg: string, id: string, scoreRowId?: string) =
       p.fill(255, 0, 0); // Röd text
       p.textSize(22);
       p.textAlign(p.LEFT);
-      p.text(`Lives: ${"❤️".repeat(lives)}`, 20, 40);
+      p.text(`Lives: ${"❤️".repeat(Math.max(0, lives))}`, 20, 40);
       p.text(`Score: ${score}`, 20, 70);
       p.pop();
-  };
+
+
+      // restart-knapp
+      if (gameStarted && !isGameOver) {
+      const isHovering = drawResetButton(p);
+      if (isHovering && p.mouseIsPressed) {
+        clearQuestion(); // Tar bort HTML-elementet
+        const s = getResetSettings();
+        
+        lives = s.lives;
+        score = initialScore;
+        saveScore(score);
+        gameStarted = false; 
+        gameStopped = false;
+        waitingForAnswer = false;
+        isHandlingQuestion = false; // Återställ logiken här med
+        jumpCount = 0;
+        posX = 0;
+        laptopsToWin = 2;
+        laptops = [600, 1000, 1400];
+        brokenLaptops = [false, false, false];
+        hasJumpedOver = [false, false, false];
+        masterMood = 'neutral';
+        masterMessage = "Hehe! To continue you need to answer this...";
+      }
+    }
+  }
 
   function applyMask(img: p5.Image, p: p5) {
     const mg = p.createGraphics(img.width, img.height);
@@ -291,16 +368,61 @@ export const gameSketch = (chosenImg: string, id: string, scoreRowId?: string) =
       p.fill(80, 50, 20); p.arc(0, -45, 95, 80, p.PI, 0); 
       p.pop();
     }
+
+     if (lives <= 0) {
+       p.resetMatrix(); // Nollställer position
+      drawGameOver(p, () => {
+        // Tar bort frågan så den inte ligger kvar
+        const qBox = document.querySelector(".question-container");
+        if (qBox) qBox.remove();
+        // Logik för att nollställa spelet
+        lives = 3;
+        score = 0; // Poängen man hade när man startade
+        jumpCount = 0;
+        gameStopped = false;
+        posX = 0;
+        laptopsToWin = 2;
+        laptops = [600, 1000, 1400];
+        brokenLaptops = [false, false, false];
+        hasJumpedOver = [false, false, false];
+      });
+      return;
+    }
   }
 //Denna funktion kallar på renderQuestion så det rendreras ut och väntar på return
 //från render funktionen för att sedan uppdatera score variabeln. 
   async function handleQuestion(question: Question) {
+  const scoreBefore = score;
+  
   await renderQuestion(question);
   const newScore = getScore();
   
-  if (newScore > score) {
-    score = newScore;
-    hasSaved = false;
+  if (newScore > scoreBefore) {
+      // RÄTT! Gå vidare till nästa fråga...
+      score = newScore;
+      hasSaved = false;
+      masterMood = 'neutral';
+      masterMessage = "Correct! You may pass.";
+      gameStopped = false;
+      waitingForAnswer = false;
+      isHandlingQuestion = false;
+      // reset till 0
+      jumpCount = 0;
+      // random laptops mellan 1-10
+       laptopsToWin = Math.floor(Math.random() * 10) + 1;
+    } else {
+      // FEL! Minska liv och skaka skärmen
+      lives -= 1;
+      isShaking = true;
+      shakeTimer = 30;
+      masterMood = 'disappointed';
+      masterMessage = "Oh no, I am disappointed. Try again!";
+
+      if (lives > 0) {
+        // försök igen på samma fråga
+        handleQuestion(question); 
+      }
+    }
   }
 
   //"nollar" vairablerna för spellogiken.
@@ -312,4 +434,4 @@ export const gameSketch = (chosenImg: string, id: string, scoreRowId?: string) =
   brokenLaptops = [false, false, false]
   isHandlingQuestion = false
 }
-};
+

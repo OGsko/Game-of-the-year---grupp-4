@@ -35,16 +35,15 @@ export async function questionList (input: string) {
 //Frågerendreringen. Return new Promise är som väntar på att användaren ska svara på frågan. 
 export function renderQuestion (questions: Question): Promise<void> {
     return new Promise((resolve) => {
-        const gameContainer = document.getElementById("gameContainer") as HTMLBodyElement
+        const gameContainer = document.getElementById("gameContainer") as HTMLElement
         
-        const oldQuestions = gameContainer.querySelectorAll(".question-container")
-        oldQuestions.forEach(q => {
-            q.querySelectorAll("button").forEach(btn => btn.onclick = null)
-            q.remove()
-        })
+        // Rensar gamla frågor så de inte staplas
+        const oldQuestions = document.querySelectorAll(".question-container")
+        oldQuestions.forEach(q => q.remove())
 
         const qContainer = document.createElement("div")
-        qContainer.className = 'question-container'
+        qContainer.className = "question-container"
+
         //Fixar svaret som hämtas från db.json. Den tar bort blank spaces och stor bokstav
         const correctAnwser = questions.answer.replace(/\s+/g, "").toLocaleLowerCase()
 
@@ -90,7 +89,7 @@ export function renderQuestion (questions: Question): Promise<void> {
             //formaterar användarens svar enligt samma som svars datan ovan.
             const userAnswer = qAnswerInput.value.replace(/\s+/g, "").toLocaleLowerCase()
             checkAnswer(userAnswer, correctAnwser)
-            qAnswerBtn.disabled = true
+            qContainer.remove()
             resolve() // När knappen trycks på, så är promise klar.
         }
     })
