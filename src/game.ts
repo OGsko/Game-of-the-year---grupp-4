@@ -1,6 +1,6 @@
 import p5 from 'p5';
 import { renderQuestion, scoreCount } from './modules/question';
-import { getSelectedQuestions, saveScore, getScore } from './modules/state';
+import { getSelectedQuestions, saveScore, getScore, getCurrentQuestionIndex } from './modules/state';
 import type { Question } from './interface';
 
 export const gameSketch = (chosenImg: string, id: string, scoreRowId?: string) => (p: p5) => {
@@ -26,7 +26,7 @@ export const gameSketch = (chosenImg: string, id: string, scoreRowId?: string) =
   let laptopsToWin = 2;
   let hasSaved: boolean = false;
   let waitingForAnswer: boolean = false;
-  let answerSubmitted: boolean = false;
+  let isHandlingQuestion : boolean = false;
 
   p.setup = () => {
     const canvas = p.createCanvas(600, 600); // Storlek på spelrutan
@@ -141,21 +141,20 @@ export const gameSketch = (chosenImg: string, id: string, scoreRowId?: string) =
     posX = p.constrain(posX, -250, 80);
     
     // jumpcount styr hur många laptops som behöver hoppas innan master dyker upp
-      if (jumpCount >= laptopsToWin && posY === groundY) {
+      if ((jumpCount >= laptopsToWin || waitingForAnswer) && posY === groundY) {
       if (!gameStopped) {
         gameStopped = true;
         waitingForAnswer = true
+        isHandlingQuestion = true
         //Tar korrekta frågorna och kallar på hanterings funktionen.
         //(Se nedan kommentar för handleQuestion)
         const questions = getSelectedQuestions()
         if (questions) {
           saveScore(score) //sparar den nuvarande scoren i state.ts
-          //Skickar nu bara in index 0 för utveckling. Ska ändras till dynamiskt värde 
-          //när det är den logiken är på plats!
-          handleQuestion(questions[0]) 
+          handleQuestion(questions[getCurrentQuestionIndex()]) 
         }
       }
-
+      
      if (!hasSaved && scoreRowId) {
     hasSaved = true;
 
@@ -303,5 +302,14 @@ export const gameSketch = (chosenImg: string, id: string, scoreRowId?: string) =
     score = newScore;
     hasSaved = false;
   }
+
+  //"nollar" vairablerna för spellogiken.
+  gameStopped = false
+  waitingForAnswer = false
+  jumpCount = 0
+  laptops = [600, 1000, 1400]
+  hasJumpedOver = [false, false, false]
+  brokenLaptops = [false, false, false]
+  isHandlingQuestion = false
 }
 };
