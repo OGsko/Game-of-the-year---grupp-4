@@ -1,6 +1,7 @@
 import { fetchQuestion } from "./fetch";
 import type { Question } from "../interface";
-import { getScore, saveScore } from "./state";
+import { getScore, saveScore, incrementQuestionIndex, getSelectedQuestions, getCurrentQuestionIndex } from "./state";
+import { winState } from "./win";
 const body = document.querySelector("body") as HTMLBodyElement
 
 export let scoreCount = 0 // Ska bestämma och ändra hur mycket poäng man får
@@ -8,12 +9,15 @@ export let scoreCount = 0 // Ska bestämma och ändra hur mycket poäng man får
 
 //Denna funktion tar ut dom frågor från db.json som stämmer överens
 //med användarens val av svårighetsgrad.
+//Den shufflar arrayen och tar ut 10 frågor.
 export async function questionList (input: string) {
     const questionData = await fetchQuestion()
 
-    const questions = questionData?.filter (
+    const questions = (questionData?.filter(
         (q) => q.difficulty === input
-    ) ?? []
+    ) ?? [])
+        .sort(() => Math.random() - 0.5)
+        .slice(0, 10);
 
     //definerar vad score ska vara beroende på svårighetsgrad
     if (input === "easy") {
@@ -25,13 +29,22 @@ export async function questionList (input: string) {
     }
 
     return questions
+
 }
 
 //Frågerendreringen. Return new Promise är som väntar på att användaren ska svara på frågan. 
 export function renderQuestion (questions: Question): Promise<void> {
     return new Promise((resolve) => {
-        const qContainer = document.createElement("div")
+        const gameContainer = document.getElementById("gameContainer") as HTMLBodyElement
+        
+        const oldQuestions = gameContainer.querySelectorAll(".question-container")
+        oldQuestions.forEach(q => {
+            q.querySelectorAll("button").forEach(btn => btn.onclick = null)
+            q.remove()
+        })
 
+        const qContainer = document.createElement("div")
+        qContainer.className = 'question-container'
         //Fixar svaret som hämtas från db.json. Den tar bort blank spaces och stor bokstav
         const correctAnwser = questions.answer.replace(/\s+/g, "").toLocaleLowerCase()
 
@@ -71,23 +84,35 @@ export function renderQuestion (questions: Question): Promise<void> {
         qContainer.appendChild(textAndImgContainer)
         qContainer.appendChild(inputAndBtnContainer)
 
-        body.appendChild(qContainer)
+        gameContainer.appendChild(qContainer)
 
-        qAnswerBtn.addEventListener("click", () => {
+        qAnswerBtn.onclick = () => {
             //formaterar användarens svar enligt samma som svars datan ovan.
             const userAnswer = qAnswerInput.value.replace(/\s+/g, "").toLocaleLowerCase()
             checkAnswer(userAnswer, correctAnwser)
+            qAnswerBtn.disabled = true
             resolve() // När knappen trycks på, så är promise klar.
-        })
+        }
     })
 }
 
 //Funktion för att jämföra rätta svaret med spelarens svar.
 //console.log är kvar för utvecklingssyfte.
 export function checkAnswer(userInput: string, correctInput: string) {
+
     if (userInput === correctInput) {
         const currentScore = getScore() //Hämtar nuvarande scoret från state.ts
         updateScore (currentScore, scoreCount)
+        incrementQuestionIndex()
+
+        //Variabler för jämförelse
+        const questions = getSelectedQuestions()
+        const currentIndex = getCurrentQuestionIndex()
+
+        //Kollar index om man svarat på varje fråga
+        if (currentIndex >= 10) {
+            winState()
+        }
         console.log("Korrekt!")
     } else {
         //Skriva en funktion för fel svar.

@@ -24,3 +24,17 @@ export function getScore () {
     return savedScore
 }
 //------------------------------------------------------------
+
+
+//variabel och funktioner för att spara och hämta frågeindex---
+let currentQuestionIndex: number = 0
+
+export function incrementQuestionIndex() {
+    currentQuestionIndex++
+}
+
+export function getCurrentQuestionIndex() {
+    return currentQuestionIndex
+}
+
+//-------------------------------------------------------------

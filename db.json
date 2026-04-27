@@ -420,6 +420,11 @@
       "avatarId": "2",
       "highscore": 2,
       "id": "uKWkEZr9Z4U"
+    },
+    {
+      "avatarId": "4",
+      "highscore": 120,
+      "id": "CASZ4s9j46k"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"
