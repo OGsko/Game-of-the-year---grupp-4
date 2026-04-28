@@ -403,6 +403,21 @@
       "id": "4",
       "userName": "Gris",
       "imageUrl": "avatar4.png"
+    },
+    {
+      "userName": "Peppa",
+      "imageUrl": "avatar4.png",
+      "id": "l1Se4OmS59k"
+    },
+    {
+      "userName": "bob",
+      "imageUrl": "avatar3.png",
+      "id": "PbUDdz6WOuY"
+    },
+    {
+      "userName": "Fia",
+      "imageUrl": "avatar2.png",
+      "id": "45Cm5axwh7g"
     }
   ],
   "scoreboard": [
@@ -413,7 +428,7 @@
     },
     {
       "avatarId": "3",
-      "highscore": 12,
+      "highscore": 48,
       "id": "ijcdc1Zt-Sk"
     },
     {
@@ -425,6 +440,21 @@
       "avatarId": "4",
       "highscore": 120,
       "id": "CASZ4s9j46k"
+    },
+    {
+      "avatarId": "l1Se4OmS59k",
+      "highscore": 16,
+      "id": "kkrzxNEZfRg"
+    },
+    {
+      "avatarId": "PbUDdz6WOuY",
+      "highscore": 0,
+      "id": "svhQbx3CXJo"
+    },
+    {
+      "avatarId": "45Cm5axwh7g",
+      "highscore": 0,
+      "id": "skN9mspX040"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"
