@@ -1,10 +1,5 @@
 import p5 from "p5";
 
-export function winState() {
-    console.log("GRATTIS! DU VANN!")
-}
-
-
 export const drawWin = (p: p5, onRestart: () => void) => {
     p.push();
   p.resetMatrix();

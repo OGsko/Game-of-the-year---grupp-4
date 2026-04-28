@@ -105,7 +105,7 @@ export const gameSketch = (chosenImg: string, id: string, scoreRowId?: string) =
   }
 
   //Visar Win skärmen när spelaren har svarat på 10 frågor. Återställer variabler.
-if (currentQuestionIndex >= 1) {
+if (currentQuestionIndex >= 10) {
   p.resetMatrix();
 
     //sparar scoren när man svarat på alla frågor i highscore om score för spelet var högre än förra scoret.
