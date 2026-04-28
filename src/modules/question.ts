@@ -1,7 +1,10 @@
 import { fetchQuestion } from "./fetch";
 import type { Question } from "../interface";
 import { getScore, saveScore, incrementQuestionIndex, getSelectedQuestions, getCurrentQuestionIndex } from "./state";
-import { winState } from "./win";
+import { winState, drawWin } from "./win";
+
+import p5 from "p5";
+
 const body = document.querySelector("body") as HTMLBodyElement
 
 export let scoreCount = 0 // Ska bestämma och ändra hur mycket poäng man får
@@ -33,7 +36,7 @@ export async function questionList (input: string) {
 }
 
 //Frågerendreringen. Return new Promise är som väntar på att användaren ska svara på frågan. 
-export function renderQuestion (questions: Question): Promise<void> {
+export function renderQuestion (questions: Question, p: p5): Promise<void> {
     return new Promise((resolve) => {
         const gameContainer = document.getElementById("gameContainer") as HTMLElement
         
@@ -88,7 +91,7 @@ export function renderQuestion (questions: Question): Promise<void> {
         qAnswerBtn.onclick = () => {
             //formaterar användarens svar enligt samma som svars datan ovan.
             const userAnswer = qAnswerInput.value.replace(/\s+/g, "").toLocaleLowerCase()
-            checkAnswer(userAnswer, correctAnwser)
+            checkAnswer(userAnswer, correctAnwser, p)
             qContainer.remove()
             resolve() // När knappen trycks på, så är promise klar.
         }
@@ -97,7 +100,7 @@ export function renderQuestion (questions: Question): Promise<void> {
 
 //Funktion för att jämföra rätta svaret med spelarens svar.
 //console.log är kvar för utvecklingssyfte.
-export function checkAnswer(userInput: string, correctInput: string) {
+export function checkAnswer(userInput: string, correctInput: string, p: p5) {
 
     if (userInput === correctInput) {
         const currentScore = getScore() //Hämtar nuvarande scoret från state.ts
@@ -107,10 +110,9 @@ export function checkAnswer(userInput: string, correctInput: string) {
         //Variabler för jämförelse
         const questions = getSelectedQuestions()
         const currentIndex = getCurrentQuestionIndex()
-        console.log("questions answerd:", currentIndex)
         //Kollar index om man svarat på varje fråga
-        if (currentIndex >= 10) {
-            winState()
+        if (currentIndex >= 2) {
+            drawWin(p)
         }
         console.log("Korrekt!")
     } else {

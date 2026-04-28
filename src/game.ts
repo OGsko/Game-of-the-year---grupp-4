@@ -198,7 +198,7 @@ export const gameSketch = (chosenImg: string, id: string, scoreRowId?: string) =
         const questions = getSelectedQuestions()
         if (questions) {
           saveScore(score) //sparar den nuvarande scoren i state.ts
-          handleQuestion(questions[getCurrentQuestionIndex()]) 
+          handleQuestion(questions[getCurrentQuestionIndex()], p) 
         }
       }
       
@@ -392,10 +392,10 @@ export const gameSketch = (chosenImg: string, id: string, scoreRowId?: string) =
   }
 //Denna funktion kallar på renderQuestion så det rendreras ut och väntar på return
 //från render funktionen för att sedan uppdatera score variabeln. 
-  async function handleQuestion(question: Question) {
+  async function handleQuestion(question: Question, pInstance: p5) {
   const scoreBefore = score;
   
-  await renderQuestion(question);
+  await renderQuestion(question, pInstance);
   const newScore = getScore();
   
   if (newScore > scoreBefore) {
@@ -421,7 +421,7 @@ export const gameSketch = (chosenImg: string, id: string, scoreRowId?: string) =
 
       if (lives > 0) {
         // försök igen på samma fråga
-        handleQuestion(question); 
+        handleQuestion(question, p); 
       }
     }
   }
