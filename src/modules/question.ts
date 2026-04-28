@@ -1,7 +1,9 @@
 import { fetchQuestion } from "./fetch";
 import type { Question } from "../interface";
 import { getScore, saveScore, incrementQuestionIndex, getCurrentQuestionIndex } from "./state";
-import { winState } from "./win";
+import { winState, drawWin } from "./win";
+
+import p5 from "p5"
 
 export let scoreCount = 0 // Ska bestämma och ändra hur mycket poäng man får
 
@@ -102,18 +104,7 @@ export function checkAnswer(userInput: string, correctInput: string, p: p5) {
         const currentScore = getScore() //Hämtar nuvarande scoret från state.ts
         updateScore (currentScore, scoreCount)
         incrementQuestionIndex()
-
-        //Variabler för jämförelse
-        const currentIndex = getCurrentQuestionIndex()
-        //Kollar index om man svarat på varje fråga
-        if (currentIndex >= 2) {
-            drawWin(p)
-        }
-        console.log("Korrekt!")
-    } else {
-        //Skriva en funktion för fel svar.
-        console.log("FEEEL!")
-    }
+    } 
 }
 
 //Uppdaterar score till det korrekta poängsystemet beroende på svårighetsgrad(10/20/30)

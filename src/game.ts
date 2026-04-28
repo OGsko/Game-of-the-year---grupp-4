@@ -1,10 +1,11 @@
 import p5 from 'p5';
 import { renderQuestion } from './modules/question';
-import { getSelectedQuestions, saveScore, getScore, getCurrentQuestionIndex, updateQuestionIndex } from './modules/state';
+import { getSelectedQuestions, saveScore, getScore, getCurrentQuestionIndex, updateQuestionIndex, currentQuestionIndex } from './modules/state';
 import type { Question } from './interface';
 import { shakeScreen } from './modules/effects';
 import { drawGameOver } from './modules/gameover';
 import { drawResetButton, getResetSettings } from './modules/resetGame';
+import { drawWin } from './modules/win';
 
 const clearQuestion = () => {
   const qContainer = document.querySelector(".question-container");
@@ -13,6 +14,7 @@ const clearQuestion = () => {
 
 export const gameSketch = (chosenImg: string, id: string, scoreRowId?: string) => (p: p5) => {
   let headImg: p5.Image | null = null; // Behållare för master img
+  let lashaImg: p5.Image | null = null;
   let playerImg: p5.Image | null = null;
   let posX: number = 0; // Gubbens position i sidled (vänster/höger)
   let posY: number = 0;  // Gubbens position i höjdled (när den hoppar)
@@ -41,6 +43,7 @@ export const gameSketch = (chosenImg: string, id: string, scoreRowId?: string) =
   let masterMood: 'neutral' | 'disappointed' = 'neutral';
   let initialScore: number = 0;
   let masterMessage = "Hehe! To continue you need to answer this...";
+  let lashaMessage = "Good work champion! You have defeated webmaster Freddan!"
 
   p.setup = () => {
     const canvas = p.createCanvas(600, 600); // Storlek på spelrutan
@@ -58,11 +61,17 @@ export const gameSketch = (chosenImg: string, id: string, scoreRowId?: string) =
       maskGraphics.fill(255);
       maskGraphics.noStroke();
       maskGraphics.ellipse(img.width / 2, img.height / 2, img.width, img.height);
-      img.mask(maskGraphics as any);
+      //img.mask(maskGraphics as any);
       headImg = img; 
     }, () => {
       console.error("Error: Could not find img");
     });
+
+    p.loadImage("/public/lasha.png", (img) => {
+      lashaImg = img;
+    }, () => {
+      console.log("Error: Could not find Lars img")
+    })
   };
   // när mellanslag trycks ner hoppar gubben
   p.keyPressed = () => {
@@ -72,7 +81,6 @@ export const gameSketch = (chosenImg: string, id: string, scoreRowId?: string) =
   };
 
  p.draw = () => {
-
   // Återställer allt om liven är slut
   if (lives <= 0) {
     p.resetMatrix();
@@ -93,7 +101,53 @@ export const gameSketch = (chosenImg: string, id: string, scoreRowId?: string) =
       updateQuestionIndex(0)
     });
     return;
+
   }
+
+  //Visar Win skärmen när spelaren har svarat på 10 frågor. Återställer variabler.
+if (currentQuestionIndex >= 1) {
+  p.resetMatrix();
+
+    //sparar scoren när man svarat på alla frågor i highscore om score för spelet var högre än förra scoret.
+    hasSaved = false; 
+    if (!hasSaved && scoreRowId) {
+      updateHighScore();
+    }
+
+  drawWin(p, () => {
+      clearQuestion();
+      masterMood = 'neutral';
+      masterMessage = "Hehe! To continue you need to answer this...";
+      lives = 3;
+      score = initialScore;
+      jumpCount = 0;
+      posX = 0;
+      laptops = [600, 1000, 1400];
+      brokenLaptops = [false, false, false];
+      hasJumpedOver = [false, false, false];
+      gameStopped = false;
+      waitingForAnswer = false;
+      isHandlingQuestion = false;
+      updateQuestionIndex(0)
+    })
+    
+  //När du har svarat på alla frågor och vunnit kommer Lars fram och gratulerar dig.
+  p.push();
+  p.translate(p.width / 2 - 200, p.height / 2 + 2); // välj position
+  drawCharacter(0, p.color(225, 41, 182), lashaImg || undefined);
+  //Lashas pratbubbla.
+  p.rectMode(p.CORNER);
+  p.fill(255); p.stroke(0); p.strokeWeight(2);
+  p.rect(-35, -150, 180, 60, 10); 
+  p.triangle(10, -90, 30, -90, 20, -75);
+  p.noStroke(); p.fill(0); p.textSize(14);
+  p.textAlign(p.CENTER, p.CENTER);
+  p.text(lashaMessage, -35, -150, 180, 60); 
+  p.pop();
+
+
+  return;
+}
     // skärmen skakar om man svarar fel i effects.ts
   if (isShaking && shakeTimer > 0) {
       shakeScreen(p);
@@ -202,32 +256,10 @@ export const gameSketch = (chosenImg: string, id: string, scoreRowId?: string) =
         }
       }
       
-     if (!hasSaved && scoreRowId) {
-    hasSaved = true;
 
-    fetch(`http://localhost:3000/scoreboard/${scoreRowId}`)
-      .then(res => res.json())
-      .then(async (currentEntry) => {
-        
-        // Spara bara om det är nytt rekord
-        if (score > currentEntry.highscore) {
-          console.log(`Nytt rekord! Uppdaterar rad ${scoreRowId} med poäng: ${score}`);
-          
-          await fetch(`http://localhost:3000/scoreboard/${scoreRowId}`, {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              avatarId: id,
-              highscore: score,
-              id: scoreRowId 
-            })
-          });
-        }
-      })
-      .catch(err => {
-        console.error("Could not update points:", err);
-        hasSaved = false; // Tillåt nytt försök om det sket sig
-      });
+
+     if (!hasSaved && scoreRowId) {
+      updateHighScore()
 
       if (masterMood === 'disappointed') {
           p.noFill();
@@ -390,6 +422,35 @@ export const gameSketch = (chosenImg: string, id: string, scoreRowId?: string) =
       return;
     }
   }
+
+  //Funktion för att updatera highscore genom PUT till databasen.
+  function updateHighScore() {
+    hasSaved = true;
+
+    fetch(`http://localhost:3000/scoreboard/${scoreRowId}`)
+      .then(res => res.json())
+      .then(async (currentEntry) => {
+        
+        // Spara bara om det är nytt rekord
+        if (score > currentEntry.highscore) {
+          console.log(`Nytt rekord! Uppdaterar rad ${scoreRowId} med poäng: ${score}`);
+          
+          await fetch(`http://localhost:3000/scoreboard/${scoreRowId}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              avatarId: id,
+              highscore: score,
+              id: scoreRowId 
+            })
+          });
+        }
+      })
+      .catch(err => {
+        console.error("Could not update points:", err);
+        hasSaved = false; // Tillåt nytt försök om det sket sig
+      });
+      }
 //Denna funktion kallar på renderQuestion så det rendreras ut och väntar på return
 //från render funktionen för att sedan uppdatera score variabeln. 
   async function handleQuestion(question: Question, pInstance: p5) {

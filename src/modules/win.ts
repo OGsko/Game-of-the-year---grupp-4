@@ -5,20 +5,20 @@ export function winState() {
 }
 
 
-export const drawWin = (p: p5) => {
+export const drawWin = (p: p5, onRestart: () => void) => {
     p.push();
   p.resetMatrix();
   
-  // Transparent mörk bakgrund
+  // Transparent gul bakgrund
   p.rectMode(p.CORNER);
   p.fill(255, 255, 0, 200); 
   p.rect(0, 0, p.width, p.height);
 
-  // Röd gameover-text
+  // Röd win-text
   p.fill(255, 50, 50); 
   p.textAlign(p.CENTER, p.CENTER);
   p.textSize(50);
-  p.text("GAME OVER", p.width / 2, p.height / 2 - 60);
+  p.text("YOU WIN!", p.width / 2, p.height / 2 - 60);
 
   const btnW = 200;
   const btnH = 60;
@@ -39,13 +39,13 @@ export const drawWin = (p: p5) => {
   p.text("Restart", btnX, btnY);
   p.pop();
 
-  // kollar om musen är över knappen när man klickar
- // const isOverButton = p.mouseX > btnX - btnW/2 && 
- //                      p.mouseX < btnX + btnW/2 && 
- //                      p.mouseY > btnY - btnH/2 && 
- //                      p.mouseY < btnY + btnH/2;
+  //kollar om musen är över knappen när man klickar
+ const isOverButton = p.mouseX > btnX - btnW/2 && 
+                      p.mouseX < btnX + btnW/2 && 
+                      p.mouseY > btnY - btnH/2 && 
+                      p.mouseY < btnY + btnH/2;
 
- // if (isOverButton && p.mouseIsPressed) {
- //   restartGame();
- // }
+ if (isOverButton && p.mouseIsPressed) {
+   onRestart();
+ }
 }
