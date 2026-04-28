@@ -1,4 +1,4 @@
-import { startPage } from './startpage';
+import { startPage } from './modules/startpage';
 import './styles/main.scss';
 
 

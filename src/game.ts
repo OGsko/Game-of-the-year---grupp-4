@@ -1,10 +1,10 @@
 import p5 from 'p5';
-import { renderQuestion, scoreCount } from './modules/question';
+import { renderQuestion } from './modules/question';
 import { getSelectedQuestions, saveScore, getScore, getCurrentQuestionIndex, updateQuestionIndex } from './modules/state';
 import type { Question } from './interface';
-import { shakeScreen } from './effects';
-import { drawGameOver } from './gameover';
-import { drawResetButton, getResetSettings } from './resetGame';
+import { shakeScreen } from './modules/effects';
+import { drawGameOver } from './modules/gameover';
+import { drawResetButton, getResetSettings } from './modules/resetGame';
 
 const clearQuestion = () => {
   const qContainer = document.querySelector(".question-container");
