@@ -1,11 +1,7 @@
 import { fetchQuestion } from "./fetch";
 import type { Question } from "../interface";
-import { getScore, saveScore, incrementQuestionIndex, getSelectedQuestions, getCurrentQuestionIndex } from "./state";
-import { winState, drawWin } from "./win";
-
-import p5 from "p5";
-
-const body = document.querySelector("body") as HTMLBodyElement
+import { getScore, saveScore, incrementQuestionIndex, getCurrentQuestionIndex } from "./state";
+import { winState } from "./win";
 
 export let scoreCount = 0 // Ska bestämma och ändra hur mycket poäng man får
 
@@ -108,7 +104,6 @@ export function checkAnswer(userInput: string, correctInput: string, p: p5) {
         incrementQuestionIndex()
 
         //Variabler för jämförelse
-        const questions = getSelectedQuestions()
         const currentIndex = getCurrentQuestionIndex()
         //Kollar index om man svarat på varje fråga
         if (currentIndex >= 2) {

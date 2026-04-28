@@ -1,11 +1,11 @@
 import p5 from 'p5';
-import { gameSketch } from './game';
-import { fetchAvatar, fetchScoreBoard } from './modules/fetch';
-import type { Avatar } from './interface';
-import type { Question } from './interface';
-
-import { questionList, renderQuestion} from './modules/question';
-import { saveSelectedQuestions } from './modules/state';
+import { gameSketch } from '../game';
+import { fetchAvatar, fetchScoreBoard } from './fetch';
+import type { Avatar } from '../interface';
+import { questionList } from './question';
+import { saveSelectedQuestions } from './state';
+import { renderAvatarList } from './displayavatars';
+import { deleteAccount } from './delete';
 
 export default function avatarChoise() {
     const body = document.querySelector("body");
@@ -96,6 +96,9 @@ export default function avatarChoise() {
                 const gameContainer = document.createElement("div");
                 gameContainer.id = "gameContainer";
                 body?.append(gameContainer);
+                
+                await renderAvatarList();
+                deleteAccount(foundUser, allScores || []); 
 
                 // Starta spelet
                 const sketchWithAvatar = gameSketch(foundUser.imageUrl, foundUser.id, userHighscore?.id);
@@ -200,19 +203,24 @@ export default function avatarChoise() {
 
                     // Hämtar datan och det nya idt från scoreboard
                     const newScoreData = await scoreResponse.json();
+                    const allScores = await fetchScoreBoard();
                     
                     body?.replaceChildren();
                     const gameContainer = document.createElement("div");
                     gameContainer.id = "gameContainer";
                     body?.append(gameContainer);
 
+                    await renderAvatarList();
+                    // Använder den skapade användaren för delete-funktionen
+                    deleteAccount(createdUser, allScores || []); 
+                    
+
                     // Skickar med både avatarId och  score-idt till spelet
-                    const sketchWithAvatar = gameSketch(selectedAvatarUrl, createdUser.id, newScoreData.id);
+                    const sketchWithAvatar = gameSketch(createdUser.imageUrl, createdUser.id, newScoreData.id);
                     new p5(sketchWithAvatar);
                 }
             } catch (err) {
                 console.error("Network error:", err);
-                alert("Could not connect to server.");
             }
         });
     })
