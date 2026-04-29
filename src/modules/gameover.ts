@@ -1,6 +1,27 @@
 import p5 from 'p5';
+import type { Scoreboard } from '../interface';
+import { showleaderboard } from './leaderboard';
 
-export const drawGameOver = (p: p5, onRestart: () => void) => {
+let hasSaved = false;
+
+export const drawGameOver = (p: p5, onRestart: () => void, finalScore: number) => {
+
+ if (!hasSaved && finalScore !== undefined) {
+    const playerName = localStorage.getItem("playerName") || "Spelare";
+    const rawData = localStorage.getItem("Highscores");
+    const allScores: Scoreboard[] = JSON.parse(rawData || "[]");
+    
+    allScores.push({ 
+      id: playerName,
+      highscore: finalScore,
+      avatarId: ""
+    });
+
+    localStorage.setItem("Highscores", JSON.stringify(allScores));
+    hasSaved = true;
+    showleaderboard(); // Uppdatera leaderboarden direkt
+  }
+
   p.push();
   p.resetMatrix();
   

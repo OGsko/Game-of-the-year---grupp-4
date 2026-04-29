@@ -1,11 +1,15 @@
 import p5 from 'p5';
 import { renderQuestion } from './modules/question';
 import { getSelectedQuestions, saveScore, getScore, getCurrentQuestionIndex, updateQuestionIndex, currentQuestionIndex } from './modules/state';
-import type { Question } from './interface';
+import type { Avatar, Question } from './interface';
 import { shakeScreen } from './modules/effects';
 import { drawGameOver } from './modules/gameover';
 import { drawResetButton, getResetSettings } from './modules/resetGame';
 import { drawWin } from './modules/win';
+import { renderAvatarList } from './modules/displayavatars';
+import { showleaderboard } from "./modules/leaderboard";
+
+
 
 const clearQuestion = () => {
   const qContainer = document.querySelector(".question-container");
@@ -84,6 +88,7 @@ export const gameSketch = (chosenImg: string, id: string, scoreRowId?: string) =
   // Återställer allt om liven är slut
   if (lives <= 0) {
     p.resetMatrix();
+    showleaderboard(); 
     drawGameOver(p, () => {
        clearQuestion();
       masterMood = 'neutral';
@@ -99,14 +104,14 @@ export const gameSketch = (chosenImg: string, id: string, scoreRowId?: string) =
       waitingForAnswer = false;
       isHandlingQuestion = false;
       updateQuestionIndex(0)
-    });
+     }, score);
     return;
 
   }
 
   //Visar Win skärmen när spelaren har svarat på 10 frågor. Återställer variabler.
-if (currentQuestionIndex >= 10) {
-  p.resetMatrix();
+  if (currentQuestionIndex >= 10) {
+    p.resetMatrix();
 
     //sparar scoren när man svarat på alla frågor i highscore om score för spelet om score var högre än lagrade highscore.
     hasSaved = false; 
@@ -114,7 +119,7 @@ if (currentQuestionIndex >= 10) {
       updateHighScore();
     }
 
-  drawWin(p, () => {
+    drawWin(p, () => {
       clearQuestion();
       masterMood = 'neutral';
       masterMessage = "Hehe! To continue you need to answer this...";
@@ -147,7 +152,7 @@ if (currentQuestionIndex >= 10) {
 
 
   return;
-}
+  }
     // skärmen skakar om man svarar fel i effects.ts
   if (isShaking && shakeTimer > 0) {
       shakeScreen(p);
@@ -418,7 +423,7 @@ if (currentQuestionIndex >= 10) {
         laptops = [600, 1000, 1400];
         brokenLaptops = [false, false, false];
         hasJumpedOver = [false, false, false];
-      });
+      }, score);
       return;
     }
   }
@@ -457,33 +462,32 @@ if (currentQuestionIndex >= 10) {
   await renderQuestion(question);
   const newScore = getScore();
   
-  if (newScore > scoreBefore) {
-      // RÄTT! Gå vidare till nästa fråga...
-      score = newScore;
-      hasSaved = false;
-      masterMood = 'neutral';
-      masterMessage = "Correct! You may pass.";
-      gameStopped = false;
-      waitingForAnswer = false;
-      isHandlingQuestion = false;
-      // reset till 0
-      jumpCount = 0;
-      // random laptops mellan 1-10
-       laptopsToWin = Math.floor(Math.random() * 10) + 1;
-    } else {
-      // FEL! Minska liv och skaka skärmen
-      lives -= 1;
-      isShaking = true;
-      shakeTimer = 30;
-      masterMood = 'disappointed';
-      masterMessage = "Oh no, I am disappointed. Try again!";
+    if (newScore > scoreBefore) {
+        // RÄTT! Gå vidare till nästa fråga...
+        score = newScore;
+        hasSaved = false;
+        masterMood = 'neutral';
+        masterMessage = "Correct! You may pass.";
+        gameStopped = false;
+        waitingForAnswer = false;
+        isHandlingQuestion = false;
+        // reset till 0
+        jumpCount = 0;
+        // random laptops mellan 1-10
+        laptopsToWin = Math.floor(Math.random() * 10) + 1;
+      } else {
+        // FEL! Minska liv och skaka skärmen
+        lives -= 1;
+        isShaking = true;
+        shakeTimer = 30;
+        masterMood = 'disappointed';
+        masterMessage = "Oh no, I am disappointed. Try again!";
 
       if (lives > 0) {
         // försök igen på samma fråga
         handleQuestion(question); 
       }
     }
-  }
 
   //"nollar" vairablerna för spellogiken.
   gameStopped = false
@@ -493,5 +497,6 @@ if (currentQuestionIndex >= 10) {
   hasJumpedOver = [false, false, false]
   brokenLaptops = [false, false, false]
   isHandlingQuestion = false
-}
-
+  
+};
+};

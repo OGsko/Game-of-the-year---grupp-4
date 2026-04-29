@@ -34,3 +34,70 @@ img {
     border-color: #cedbe0;
     }
 }
+
+#scoreBoardSide {
+    text-align: left;
+    padding-left: 25px;
+
+    li {
+        font-family: 'Courier New', Courier, monospace;
+        margin-bottom: 8px;
+
+    }
+}
+
+#leaderboard-container {
+    position: absolute;
+    right: 20px;
+    top: 50px;
+    background: rgba(255, 255, 255, 0.8); //Lite genomskinlig vit bakgrund 
+    width: 220px;
+    padding: 15px;
+    border: 1px solid #000000;
+    z-index: 100;
+    pointer-events: none;
+
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+}
+
+#leaderboard-container h2 {
+    display: block;
+    width: 100%;
+    font-size: 27px;
+    margin: 0 0 10px 0;
+    text-align: center;
+    color: #333;
+}
+
+#score-list {
+    display: block;
+    width: 100%;
+
+}
+
+#score-list li {
+    display: flex;
+    align-self: center;
+    padding: 5px 0;
+    color: rgb(60, 5, 189);
+    width: 100%;
+}
+.player-rank {
+    width: 30px;
+    flex-shrink: 0;
+}
+.player-name {
+    flex-grow: 1;
+    text-align: left;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-right: 10px;
+}
+
+.player-score {
+    font-weight: bold;
+    color: #333;
+}
