@@ -1,6 +1,7 @@
 import { renderAvatarList } from "./displayavatars.ts";
 import avatarChoise from "./login.ts";
 
+//rendrerar startskärmen
 export function startPage() {
     const body = document.querySelector("body");
     body?.replaceChildren(); 

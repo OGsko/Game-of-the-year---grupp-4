@@ -1,3 +1,5 @@
+//interface för varje datatyp
+
 export interface Question {
     id: number,
     subject: string,
