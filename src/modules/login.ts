@@ -89,9 +89,6 @@ export default function avatarChoise() {
         userHighscore = await newScoreResponse.json();
     }
 
-    const currentScore = userHighscore?.highscore || 0;
-                console.log(`Welcome ${username}! Highscore: ${currentScore}`);
-
                 body?.replaceChildren();
                 const gameContainer = document.createElement("div");
                 gameContainer.id = "gameContainer";

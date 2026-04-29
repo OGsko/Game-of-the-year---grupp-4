@@ -54,7 +54,7 @@ export const gameSketch = (chosenImg: string, id: string, scoreRowId?: string) =
     p.loadImage(playerPath, (img) => {
       playerImg = applyMask(img, p);
     });
-    // Kommentera bort img-sökvägen för att ta bort bilden
+
     p.loadImage('/master.png', (img) => {
       // bakom img är ansiktet maskat med vit bubbla
       const maskGraphics = p.createGraphics(img.width, img.height);
@@ -70,7 +70,7 @@ export const gameSketch = (chosenImg: string, id: string, scoreRowId?: string) =
     p.loadImage("/public/lasha.png", (img) => {
       lashaImg = img;
     }, () => {
-      console.log("Error: Could not find Lars img")
+      console.error("Error: Could not find Lars img")
     })
   };
   // när mellanslag trycks ner hoppar gubben
@@ -108,7 +108,7 @@ export const gameSketch = (chosenImg: string, id: string, scoreRowId?: string) =
 if (currentQuestionIndex >= 10) {
   p.resetMatrix();
 
-    //sparar scoren när man svarat på alla frågor i highscore om score för spelet var högre än förra scoret.
+    //sparar scoren när man svarat på alla frågor i highscore om score för spelet om score var högre än lagrade highscore.
     hasSaved = false; 
     if (!hasSaved && scoreRowId) {
       updateHighScore();
@@ -133,7 +133,7 @@ if (currentQuestionIndex >= 10) {
     
   //När du har svarat på alla frågor och vunnit kommer Lars fram och gratulerar dig.
   p.push();
-  p.translate(p.width / 2 - 200, p.height / 2 + 2); // välj position
+  p.translate(p.width / 2 - 200, p.height / 2 + 2); //position
   drawCharacter(0, p.color(225, 41, 182), lashaImg || undefined);
   //Lashas pratbubbla.
   p.rectMode(p.CORNER);
@@ -252,7 +252,7 @@ if (currentQuestionIndex >= 10) {
         const questions = getSelectedQuestions()
         if (questions) {
           saveScore(score) //sparar den nuvarande scoren i state.ts
-          handleQuestion(questions[getCurrentQuestionIndex()], p) 
+          handleQuestion(questions[getCurrentQuestionIndex()]) 
         }
       }
       
@@ -273,7 +273,7 @@ if (currentQuestionIndex >= 10) {
       p.push();
       p.translate(p.width / 2 + 150, p.height / 2 + 10);  // sista värdet styr masters position
       
-      // Ritar Master-gubben RGB styr färgen på tröjan
+      // Ritar Master-gubben. RGB styr färgen på tröjan
       drawCharacter(0, p.color(50, 150, 50), headImg || undefined);
       
       // Pratbubbla
@@ -433,7 +433,6 @@ if (currentQuestionIndex >= 10) {
         
         // Spara bara om det är nytt rekord
         if (score > currentEntry.highscore) {
-          console.log(`Nytt rekord! Uppdaterar rad ${scoreRowId} med poäng: ${score}`);
           
           await fetch(`http://localhost:3000/scoreboard/${scoreRowId}`, {
             method: 'PUT',
@@ -451,12 +450,11 @@ if (currentQuestionIndex >= 10) {
         hasSaved = false; // Tillåt nytt försök om det sket sig
       });
       }
-//Denna funktion kallar på renderQuestion så det rendreras ut och väntar på return
-//från render funktionen för att sedan uppdatera score variabeln. 
-  async function handleQuestion(question: Question, pInstance: p5) {
+//Denna funktion kallar på renderQuestion så det rendreras ut och väntar på return från render funktionen för att sedan uppdatera score variabeln. 
+  async function handleQuestion(question: Question) {
   const scoreBefore = score;
   
-  await renderQuestion(question, pInstance);
+  await renderQuestion(question);
   const newScore = getScore();
   
   if (newScore > scoreBefore) {
@@ -482,7 +480,7 @@ if (currentQuestionIndex >= 10) {
 
       if (lives > 0) {
         // försök igen på samma fråga
-        handleQuestion(question, p); 
+        handleQuestion(question); 
       }
     }
   }
