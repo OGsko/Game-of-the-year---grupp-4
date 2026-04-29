@@ -1,5 +1,5 @@
 import p5 from "p5";
-
+//ritar upp vin skärmen
 export const drawWin = (p: p5, onRestart: () => void) => {
     p.push();
   p.resetMatrix();

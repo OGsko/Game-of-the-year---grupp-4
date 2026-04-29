@@ -1,9 +1,11 @@
 import { renderAvatarList } from "./displayavatars.ts";
 import avatarChoise from "./login.ts";
 import type { Scoreboard } from "../interface.ts";
-import { showleaderboard } from "../game.ts";
+import { showleaderboard } from "./leaderboard";
 
 
+
+//rendrerar startskärmen
 export function startPage() {
     const body = document.querySelector("body");
     body?.replaceChildren(); 

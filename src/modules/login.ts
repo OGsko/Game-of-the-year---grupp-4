@@ -89,11 +89,8 @@ export default function avatarChoise() {
         });
         userHighscore = await newScoreResponse.json();
     }
-
-    const currentScore = userHighscore?.highscore || 0;
-                console.log(`Welcome ${username}! Highscore: ${currentScore}`);
-
-                appContent?.replaceChildren();
+        appContent?.replaceChildren();
+                
                 const gameContainer = document.createElement("div");
                 gameContainer.id = "gameContainer";
                 appContent?.append(gameContainer);

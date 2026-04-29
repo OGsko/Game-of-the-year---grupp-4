@@ -7,6 +7,8 @@ import { drawGameOver } from './modules/gameover';
 import { drawResetButton, getResetSettings } from './modules/resetGame';
 import { drawWin } from './modules/win';
 import { renderAvatarList } from './modules/displayavatars';
+import { showleaderboard } from "./modules/leaderboard";
+
 
 
 const clearQuestion = () => {
@@ -56,7 +58,7 @@ export const gameSketch = (chosenImg: string, id: string, scoreRowId?: string) =
     p.loadImage(playerPath, (img) => {
       playerImg = applyMask(img, p);
     });
-    // Kommentera bort img-sökvägen för att ta bort bilden
+
     p.loadImage('/master.png', (img) => {
       // bakom img är ansiktet maskat med vit bubbla
       const maskGraphics = p.createGraphics(img.width, img.height);
@@ -72,7 +74,7 @@ export const gameSketch = (chosenImg: string, id: string, scoreRowId?: string) =
     p.loadImage("/public/lasha.png", (img) => {
       lashaImg = img;
     }, () => {
-      console.log("Error: Could not find Lars img")
+      console.error("Error: Could not find Lars img")
     })
   };
   // när mellanslag trycks ner hoppar gubben
@@ -111,7 +113,7 @@ export const gameSketch = (chosenImg: string, id: string, scoreRowId?: string) =
   if (currentQuestionIndex >= 10) {
     p.resetMatrix();
 
-    //sparar scoren när man svarat på alla frågor i highscore om score för spelet var högre än förra scoret.
+    //sparar scoren när man svarat på alla frågor i highscore om score för spelet om score var högre än lagrade highscore.
     hasSaved = false; 
     if (!hasSaved && scoreRowId) {
       updateHighScore();
@@ -136,7 +138,7 @@ export const gameSketch = (chosenImg: string, id: string, scoreRowId?: string) =
     
   //När du har svarat på alla frågor och vunnit kommer Lars fram och gratulerar dig.
   p.push();
-  p.translate(p.width / 2 - 200, p.height / 2 + 2); // välj position
+  p.translate(p.width / 2 - 200, p.height / 2 + 2); //position
   drawCharacter(0, p.color(225, 41, 182), lashaImg || undefined);
   //Lashas pratbubbla.
   p.rectMode(p.CORNER);
@@ -255,7 +257,7 @@ export const gameSketch = (chosenImg: string, id: string, scoreRowId?: string) =
         const questions = getSelectedQuestions()
         if (questions) {
           saveScore(score) //sparar den nuvarande scoren i state.ts
-          handleQuestion(questions[getCurrentQuestionIndex()], p) 
+          handleQuestion(questions[getCurrentQuestionIndex()]) 
         }
       }
       
@@ -276,7 +278,7 @@ export const gameSketch = (chosenImg: string, id: string, scoreRowId?: string) =
       p.push();
       p.translate(p.width / 2 + 150, p.height / 2 + 10);  // sista värdet styr masters position
       
-      // Ritar Master-gubben RGB styr färgen på tröjan
+      // Ritar Master-gubben. RGB styr färgen på tröjan
       drawCharacter(0, p.color(50, 150, 50), headImg || undefined);
       
       // Pratbubbla
@@ -436,7 +438,6 @@ export const gameSketch = (chosenImg: string, id: string, scoreRowId?: string) =
         
         // Spara bara om det är nytt rekord
         if (score > currentEntry.highscore) {
-          console.log(`Nytt rekord! Uppdaterar rad ${scoreRowId} med poäng: ${score}`);
           
           await fetch(`http://localhost:3000/scoreboard/${scoreRowId}`, {
             method: 'PUT',
@@ -454,13 +455,12 @@ export const gameSketch = (chosenImg: string, id: string, scoreRowId?: string) =
         hasSaved = false; // Tillåt nytt försök om det sket sig
       });
       }
-      //Denna funktion kallar på renderQuestion så det rendreras ut och väntar på return
-      //från render funktionen för att sedan uppdatera score variabeln. 
-  async function handleQuestion(question: Question, pInstance: p5) {
-    const scoreBefore = score;
+//Denna funktion kallar på renderQuestion så det rendreras ut och väntar på return från render funktionen för att sedan uppdatera score variabeln. 
+  async function handleQuestion(question: Question) {
+  const scoreBefore = score;
   
-    await renderQuestion(question, pInstance);
-    const newScore = getScore();
+  await renderQuestion(question);
+  const newScore = getScore();
   
     if (newScore > scoreBefore) {
         // RÄTT! Gå vidare till nästa fråga...
@@ -483,10 +483,9 @@ export const gameSketch = (chosenImg: string, id: string, scoreRowId?: string) =
         masterMood = 'disappointed';
         masterMessage = "Oh no, I am disappointed. Try again!";
 
-        if (lives > 0) {
-          // försök igen på samma fråga
-          handleQuestion(question, p); 
-        }
+      if (lives > 0) {
+        // försök igen på samma fråga
+        handleQuestion(question); 
       }
     }
 
@@ -500,68 +499,4 @@ export const gameSketch = (chosenImg: string, id: string, scoreRowId?: string) =
   isHandlingQuestion = false
   
 };
-
-export async function showleaderboard() {
-    const listContainer = document.querySelector("#score-list");
-    if (!listContainer) return;
-
-     try {
-      const scoreRes = await fetch("http://localhost:3000/scoreboard");
-      const allScores = await scoreRes.json();
-
-      const avatarRes = await fetch("http://localhost:3000/avatars");
-      const allAvatars: Avatar[] = await avatarRes.json();
-
-
-        allScores.sort((a: any, b: any) => b.highscore - a.highscore);
-        const topFiveScores = allScores.slice(0, 5);
-
-        listContainer.replaceChildren();
-
-        
-        topFiveScores.forEach((entry: any, index: number) => {
-            const matchingAvatar =allAvatars.find((a: any) => a.id === entry.id || a.id === entry.avatarId);
-            const displayName = matchingAvatar ? matchingAvatar.userName : "Okänd";
-            const li = document.createElement("li");
-
-            const rankDisplay = document.createElement("span");
-            rankDisplay.className = ("player-rank");
-            rankDisplay.textContent = `${index + 1}. `;
-            
-            const userIdent = document.createElement("span");
-            userIdent.className = "player-name";
-  
-            userIdent.textContent = `${displayName} `; 
-
-            const scoreSpan = document.createElement("span");
-            scoreSpan.className = "player-score";
-            scoreSpan.textContent = entry.highscore.toString();
-
-            li.append(rankDisplay, userIdent, scoreSpan);
-            listContainer.appendChild(li);
-        });
-    } catch (err) {
-        console.error("Felsökning:", err);
-    }
-}
-
-    /*const response = await fetch("http://localhost:3000/scoreboard");
-    const allScores = await response.json();
-    
-    allScores.sort((a: any, b: any) => b.highscore - a.highscore);
-    const topFiveScores = allScores.slice(0, 5);
-
-    if (allScores.length === 0) {
-        listContainer.innerHTML = "<li>No scores yet</li>";
-        return;
-    }
-
-    listContainer.innerHTML = topFiveScores 
-    .map((entry: any) => `
-        <li>
-            <span class="player-name">${entry.id}</span>:
-            <span class="player-score">${entry.highscore}</span>
-        </li>
-    `)
-    .join("");
-}*/
+};

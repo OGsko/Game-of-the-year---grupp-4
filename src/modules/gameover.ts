@@ -1,6 +1,6 @@
 import p5 from 'p5';
 import type { Scoreboard } from '../interface';
-import { showleaderboard } from '../game.ts';
+import { showleaderboard } from './leaderboard';
 
 let hasSaved = false;
 

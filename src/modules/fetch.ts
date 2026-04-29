@@ -3,8 +3,7 @@ const questionUrl = "http://localhost:3000/questions"
 const avatarUrl = "http://localhost:3000/avatars"
 const scoreBoardUrl = "http://localhost:3000/scoreboard"
 
-//Fetch functions that is ready to import into the other modules. With try/ error server respond and catch.
-//The throw/catch messages may need to get updated, if we want a graphic message for the different errors.
+// Fetch funktioner som är redo att importeras till andra moduler, med try/catch för serversvar och felhantering.
 export async function fetchQuestion(): Promise<Question[] | null> {
     try {
         const response = await fetch(questionUrl)
@@ -18,7 +17,7 @@ export async function fetchQuestion(): Promise<Question[] | null> {
 
         return data
     } catch (error) {
-        console.log("Failed to fetch question", error)
+        console.error("Failed to fetch question", error)
         return null
     }
 }
@@ -36,7 +35,7 @@ export async function fetchAvatar(): Promise<Avatar[] | null> {
 
         return data
     } catch (error) {
-        console.log("Failed to fetch avatar", error)
+        console.error("Failed to fetch avatar", error)
         return null
     }
 }
@@ -54,7 +53,7 @@ export async function fetchScoreBoard(): Promise<Scoreboard[] | null> {
 
         return data
     } catch (error) {
-        console.log("Failed to fetch scoreboard", error)
+        console.error("Failed to fetch scoreboard", error)
         return null
     }
 }
