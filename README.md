@@ -23,7 +23,7 @@ När man får slut på liv och får game over sparas ditt slutgiltiga poäng vid
 ## Mappstruktur 
 - SASS mapp struktur enligt 7-1 pattern.
 - Vi använder oss av src för TypeScript filerna, med en mapp för moduler.
-- Alla bilder har vi i en image mapp.
+- Alla bilder har vi i en image mapp. Notering: För att SASS och vite skulle funka, så skulle bilder ligga i en public mapp vilket det gör i projektet.
 
 
 ## Namngivning
