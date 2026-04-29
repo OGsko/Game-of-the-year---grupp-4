@@ -1,7 +1,7 @@
 import { fetchQuestion } from "./fetch";
 import type { Question } from "../interface";
 import { getScore, saveScore, incrementQuestionIndex, getCurrentQuestionIndex } from "./state";
-import { winState, drawWin } from "./win";
+import { drawWin } from "./win";
 
 import p5 from "p5"
 

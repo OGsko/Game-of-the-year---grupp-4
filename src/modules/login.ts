@@ -7,10 +7,11 @@ import { saveSelectedQuestions } from './state';
 import { renderAvatarList } from './displayavatars';
 import { deleteAccount } from './delete';
 
-export default function avatarChoise() {
-    const body = document.querySelector("body");
 
-    body?.replaceChildren();
+export default function avatarChoise() {
+    const appContent = document.querySelector("#app-content");
+
+    appContent?.replaceChildren();
 
     const avatarContainer = document.createElement("div");
     avatarContainer.id = "avatarContainer";
@@ -51,7 +52,7 @@ export default function avatarChoise() {
     difficultyInput.add(hardOpt)
     //--------------------------------------------------
 
-    body?.append(avatarContainer);
+    appContent?.append(avatarContainer);
     avatarContainer.append(logInText, userNameInput, logInBtn, or, createUserText, createBtn, difficultyText, difficultyInput);
 
     // Loggar in om användare finns
@@ -92,10 +93,10 @@ export default function avatarChoise() {
     const currentScore = userHighscore?.highscore || 0;
                 console.log(`Welcome ${username}! Highscore: ${currentScore}`);
 
-                body?.replaceChildren();
+                appContent?.replaceChildren();
                 const gameContainer = document.createElement("div");
                 gameContainer.id = "gameContainer";
-                body?.append(gameContainer);
+                appContent?.append(gameContainer);
                 
                 await renderAvatarList();
                 deleteAccount(foundUser, allScores || []); 
@@ -205,10 +206,10 @@ export default function avatarChoise() {
                     const newScoreData = await scoreResponse.json();
                     const allScores = await fetchScoreBoard();
                     
-                    body?.replaceChildren();
+                    appContent?.replaceChildren();
                     const gameContainer = document.createElement("div");
                     gameContainer.id = "gameContainer";
-                    body?.append(gameContainer);
+                    appContent?.append(gameContainer);
 
                     await renderAvatarList();
                     // Använder den skapade användaren för delete-funktionen
@@ -224,4 +225,28 @@ export default function avatarChoise() {
             }
         });
     })
+}
+export async function showleaderboard() {
+    const listContainer = document.querySelector("#score-list");
+    if (!listContainer) return;
+
+    // Hämta lokala poäng (eller kör fetchScoreBoard() om du vill ha live-data)
+    const allScores = JSON.parse(localStorage.getItem("Highscores") || "[]");
+    
+    allScores.sort((a: any, b: any) => b.highscore - a.highscore);
+    const topFiveScores = allScores.slice(0, 5);
+
+    if (allScores.length === 0) {
+        listContainer.innerHTML = "<li>No scores yet</li>";
+        return;
+    }
+
+    listContainer.innerHTML = topFiveScores 
+    .map((entry: any) => `
+        <li>
+            <span class="player-name">${entry.id}</span>:
+            <span class="player-score">${entry.highscore}</span>
+        </li>
+    `)
+    .join("");
 }

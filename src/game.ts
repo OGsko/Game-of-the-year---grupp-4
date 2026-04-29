@@ -1,11 +1,13 @@
 import p5 from 'p5';
 import { renderQuestion } from './modules/question';
 import { getSelectedQuestions, saveScore, getScore, getCurrentQuestionIndex, updateQuestionIndex, currentQuestionIndex } from './modules/state';
-import type { Question } from './interface';
+import type { Avatar, Question } from './interface';
 import { shakeScreen } from './modules/effects';
 import { drawGameOver } from './modules/gameover';
 import { drawResetButton, getResetSettings } from './modules/resetGame';
 import { drawWin } from './modules/win';
+import { renderAvatarList } from './modules/displayavatars';
+
 
 const clearQuestion = () => {
   const qContainer = document.querySelector(".question-container");
@@ -84,6 +86,7 @@ export const gameSketch = (chosenImg: string, id: string, scoreRowId?: string) =
   // Återställer allt om liven är slut
   if (lives <= 0) {
     p.resetMatrix();
+    showleaderboard(); 
     drawGameOver(p, () => {
        clearQuestion();
       masterMood = 'neutral';
@@ -99,14 +102,14 @@ export const gameSketch = (chosenImg: string, id: string, scoreRowId?: string) =
       waitingForAnswer = false;
       isHandlingQuestion = false;
       updateQuestionIndex(0)
-    });
+     }, score);
     return;
 
   }
 
   //Visar Win skärmen när spelaren har svarat på 10 frågor. Återställer variabler.
-if (currentQuestionIndex >= 10) {
-  p.resetMatrix();
+  if (currentQuestionIndex >= 10) {
+    p.resetMatrix();
 
     //sparar scoren när man svarat på alla frågor i highscore om score för spelet var högre än förra scoret.
     hasSaved = false; 
@@ -114,7 +117,7 @@ if (currentQuestionIndex >= 10) {
       updateHighScore();
     }
 
-  drawWin(p, () => {
+    drawWin(p, () => {
       clearQuestion();
       masterMood = 'neutral';
       masterMessage = "Hehe! To continue you need to answer this...";
@@ -147,7 +150,7 @@ if (currentQuestionIndex >= 10) {
 
 
   return;
-}
+  }
     // skärmen skakar om man svarar fel i effects.ts
   if (isShaking && shakeTimer > 0) {
       shakeScreen(p);
@@ -418,7 +421,7 @@ if (currentQuestionIndex >= 10) {
         laptops = [600, 1000, 1400];
         brokenLaptops = [false, false, false];
         hasJumpedOver = [false, false, false];
-      });
+      }, score);
       return;
     }
   }
@@ -451,41 +454,41 @@ if (currentQuestionIndex >= 10) {
         hasSaved = false; // Tillåt nytt försök om det sket sig
       });
       }
-//Denna funktion kallar på renderQuestion så det rendreras ut och väntar på return
-//från render funktionen för att sedan uppdatera score variabeln. 
+      //Denna funktion kallar på renderQuestion så det rendreras ut och väntar på return
+      //från render funktionen för att sedan uppdatera score variabeln. 
   async function handleQuestion(question: Question, pInstance: p5) {
-  const scoreBefore = score;
+    const scoreBefore = score;
   
-  await renderQuestion(question, pInstance);
-  const newScore = getScore();
+    await renderQuestion(question, pInstance);
+    const newScore = getScore();
   
-  if (newScore > scoreBefore) {
-      // RÄTT! Gå vidare till nästa fråga...
-      score = newScore;
-      hasSaved = false;
-      masterMood = 'neutral';
-      masterMessage = "Correct! You may pass.";
-      gameStopped = false;
-      waitingForAnswer = false;
-      isHandlingQuestion = false;
-      // reset till 0
-      jumpCount = 0;
-      // random laptops mellan 1-10
-       laptopsToWin = Math.floor(Math.random() * 10) + 1;
-    } else {
-      // FEL! Minska liv och skaka skärmen
-      lives -= 1;
-      isShaking = true;
-      shakeTimer = 30;
-      masterMood = 'disappointed';
-      masterMessage = "Oh no, I am disappointed. Try again!";
+    if (newScore > scoreBefore) {
+        // RÄTT! Gå vidare till nästa fråga...
+        score = newScore;
+        hasSaved = false;
+        masterMood = 'neutral';
+        masterMessage = "Correct! You may pass.";
+        gameStopped = false;
+        waitingForAnswer = false;
+        isHandlingQuestion = false;
+        // reset till 0
+        jumpCount = 0;
+        // random laptops mellan 1-10
+        laptopsToWin = Math.floor(Math.random() * 10) + 1;
+      } else {
+        // FEL! Minska liv och skaka skärmen
+        lives -= 1;
+        isShaking = true;
+        shakeTimer = 30;
+        masterMood = 'disappointed';
+        masterMessage = "Oh no, I am disappointed. Try again!";
 
-      if (lives > 0) {
-        // försök igen på samma fråga
-        handleQuestion(question, p); 
+        if (lives > 0) {
+          // försök igen på samma fråga
+          handleQuestion(question, p); 
+        }
       }
     }
-  }
 
   //"nollar" vairablerna för spellogiken.
   gameStopped = false
@@ -495,5 +498,70 @@ if (currentQuestionIndex >= 10) {
   hasJumpedOver = [false, false, false]
   brokenLaptops = [false, false, false]
   isHandlingQuestion = false
+  
+};
+
+export async function showleaderboard() {
+    const listContainer = document.querySelector("#score-list");
+    if (!listContainer) return;
+
+     try {
+      const scoreRes = await fetch("http://localhost:3000/scoreboard");
+      const allScores = await scoreRes.json();
+
+      const avatarRes = await fetch("http://localhost:3000/avatars");
+      const allAvatars: Avatar[] = await avatarRes.json();
+
+
+        allScores.sort((a: any, b: any) => b.highscore - a.highscore);
+        const topFiveScores = allScores.slice(0, 5);
+
+        listContainer.replaceChildren();
+
+        
+        topFiveScores.forEach((entry: any, index: number) => {
+            const matchingAvatar =allAvatars.find((a: any) => a.id === entry.id || a.id === entry.avatarId);
+            const displayName = matchingAvatar ? matchingAvatar.userName : "Okänd";
+            const li = document.createElement("li");
+
+            const rankDisplay = document.createElement("span");
+            rankDisplay.className = ("player-rank");
+            rankDisplay.textContent = `${index + 1}. `;
+            
+            const userIdent = document.createElement("span");
+            userIdent.className = "player-name";
+  
+            userIdent.textContent = `${displayName} `; 
+
+            const scoreSpan = document.createElement("span");
+            scoreSpan.className = "player-score";
+            scoreSpan.textContent = entry.highscore.toString();
+
+            li.append(rankDisplay, userIdent, scoreSpan);
+            listContainer.appendChild(li);
+        });
+    } catch (err) {
+        console.error("Felsökning:", err);
+    }
 }
 
+    /*const response = await fetch("http://localhost:3000/scoreboard");
+    const allScores = await response.json();
+    
+    allScores.sort((a: any, b: any) => b.highscore - a.highscore);
+    const topFiveScores = allScores.slice(0, 5);
+
+    if (allScores.length === 0) {
+        listContainer.innerHTML = "<li>No scores yet</li>";
+        return;
+    }
+
+    listContainer.innerHTML = topFiveScores 
+    .map((entry: any) => `
+        <li>
+            <span class="player-name">${entry.id}</span>:
+            <span class="player-score">${entry.highscore}</span>
+        </li>
+    `)
+    .join("");
+}*/

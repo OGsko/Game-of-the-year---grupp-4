@@ -390,11 +390,6 @@
       "imageUrl": "avatar1.png"
     },
     {
-      "id": "2",
-      "userName": "Berit",
-      "imageUrl": "avatar2.png"
-    },
-    {
       "id": "3",
       "userName": "Bosse",
       "imageUrl": "avatar3.png"
@@ -418,12 +413,27 @@
       "userName": "Fia",
       "imageUrl": "avatar2.png",
       "id": "45Cm5axwh7g"
+    },
+    {
+      "userName": "3",
+      "imageUrl": "avatar2.png",
+      "id": "Uhg2AVrv7KU"
+    },
+    {
+      "userName": "Bertil",
+      "imageUrl": "avatar1.png",
+      "id": "ou7-jcW4aQs"
+    },
+    {
+      "userName": "Berit",
+      "imageUrl": "avatar2.png",
+      "id": "G4v5JMJeVNU"
     }
   ],
   "scoreboard": [
     {
       "avatarId": "1",
-      "highscore": 0,
+      "highscore": 47,
       "id": "88lcAjqtkrg"
     },
     {
@@ -432,29 +442,39 @@
       "id": "ijcdc1Zt-Sk"
     },
     {
-      "avatarId": "2",
-      "highscore": 39,
-      "id": "uKWkEZr9Z4U"
-    },
-    {
       "avatarId": "4",
       "highscore": 120,
       "id": "CASZ4s9j46k"
     },
     {
       "avatarId": "l1Se4OmS59k",
-      "highscore": 16,
+      "highscore": 86,
       "id": "kkrzxNEZfRg"
     },
     {
       "avatarId": "PbUDdz6WOuY",
-      "highscore": 0,
+      "highscore": 2,
       "id": "svhQbx3CXJo"
     },
     {
       "avatarId": "45Cm5axwh7g",
       "highscore": 0,
       "id": "skN9mspX040"
+    },
+    {
+      "avatarId": "Uhg2AVrv7KU",
+      "highscore": 2,
+      "id": "IooAvaOojlE"
+    },
+    {
+      "avatarId": "ou7-jcW4aQs",
+      "highscore": 94,
+      "id": "H6BAuf68W2k"
+    },
+    {
+      "avatarId": "G4v5JMJeVNU",
+      "highscore": 99,
+      "id": "yvcGak_XDcA"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"
