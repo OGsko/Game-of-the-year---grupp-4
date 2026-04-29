@@ -10,7 +10,7 @@ https://docs.google.com/document/d/194lG1zPv52gTGn9RfQ1uwQKxxCgEKobIAY4tmI_DfTU/
 Man ska navigera en karaktär genom olika hinder. Dessa hinder representerar en programmeringsfråga inom HTML, CSS och javascript/typescript och med olika svårighetsgrader. 
 Om man svarar fel på frågan förlorar man 1 av 3 liv och din karaktär blir arg. Om man svarar rätt på en fråga får man poäng utifrån vad det är för svårighetsgrad frågan var på i en tregradig skala.
 
-När man får slut på liv och får game over sparas ditt slutgiltiga poäng vid ditt namn i en scoreboard. Om du lyckas svara på alla frågor utan att förlora, kommer det utmärkas i scoreboarden och en gubbe kommer och gratulerar dig med en partyhatt.
+När man får slut på liv och får game over sparas ditt slutgiltiga poäng vid ditt namn i en scoreboard. Om du lyckas svara på alla frågor utan att förlora kommer en gubbe och gratulerar dig med en partyhatt.
 
 ## Hur projektet byggs och körs 
 ### Instruktioner
