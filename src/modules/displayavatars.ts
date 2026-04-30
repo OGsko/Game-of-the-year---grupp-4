@@ -2,6 +2,8 @@ import type { Avatar } from "../interface";
 
 export async function renderAvatarList() {
     try {
+        document.querySelector(".avatar-sidebar-div")?.remove();
+
         const response = await fetch("http://localhost:3000/avatars");
         if (!response.ok) throw new Error("Kunde inte hämta avatarer");
         

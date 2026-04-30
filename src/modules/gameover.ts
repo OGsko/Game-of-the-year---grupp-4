@@ -1,6 +1,6 @@
 import p5 from 'p5';
 import type { Scoreboard } from '../interface';
-import { showleaderboard } from './leaderboard';
+import { showLeaderboard } from './leaderboard';
 
 let hasSaved = false;
 
@@ -19,7 +19,7 @@ export const drawGameOver = (p: p5, onRestart: () => void, finalScore: number) =
 
     localStorage.setItem("Highscores", JSON.stringify(allScores));
     hasSaved = true;
-    showleaderboard(); // Uppdatera leaderboarden direkt
+    showLeaderboard(); // Uppdatera leaderboarden direkt
   }
 
   p.push();

@@ -1,7 +1,6 @@
 import { renderAvatarList } from "./displayavatars.ts";
 import avatarChoise from "./login.ts";
-import type { Scoreboard } from "../interface.ts";
-import { showleaderboard } from "./leaderboard";
+import { showLeaderboard } from "./leaderboard";
 
 
 
@@ -43,7 +42,7 @@ export function startPage() {
 
     body?.append(mainContent);
 
-    showleaderboard();
+    showLeaderboard();
     renderAvatarList();
 
     playBtn.addEventListener("click", () => {

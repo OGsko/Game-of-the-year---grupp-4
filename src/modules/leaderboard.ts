@@ -1,7 +1,7 @@
 import type { Avatar } from "../interface";
 
 
-export async function showleaderboard() {
+export async function showLeaderboard() {
     const listContainer = document.querySelector("#score-list");
     if (!listContainer) return;
 
