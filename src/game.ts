@@ -1,13 +1,12 @@
 import p5 from 'p5';
 import { renderQuestion } from './modules/question';
 import { getSelectedQuestions, saveScore, getScore, getCurrentQuestionIndex, updateQuestionIndex, currentQuestionIndex } from './modules/state';
-import type { Avatar, Question } from './interface';
+import type { Question } from './interface';
 import { shakeScreen } from './modules/effects';
 import { drawGameOver } from './modules/gameover';
 import { drawResetButton, getResetSettings } from './modules/resetGame';
 import { drawWin } from './modules/win';
-import { renderAvatarList } from './modules/displayavatars';
-import { showleaderboard } from "./modules/leaderboard";
+import { showLeaderboard } from "./modules/leaderboard";
 
 
 
@@ -40,7 +39,6 @@ export const gameSketch = (chosenImg: string, id: string, scoreRowId?: string) =
   let laptopsToWin = 2;
   let hasSaved: boolean = false;
   let waitingForAnswer: boolean = false;
-  let isHandlingQuestion : boolean = false;
   let isGameOver: boolean = false;
   let isShaking: boolean = false;
   let shakeTimer: number = 0;
@@ -88,7 +86,7 @@ export const gameSketch = (chosenImg: string, id: string, scoreRowId?: string) =
   // Återställer allt om liven är slut
   if (lives <= 0) {
     p.resetMatrix();
-    showleaderboard(); 
+    showLeaderboard(); 
     drawGameOver(p, () => {
        clearQuestion();
       masterMood = 'neutral';
@@ -102,7 +100,6 @@ export const gameSketch = (chosenImg: string, id: string, scoreRowId?: string) =
       hasJumpedOver = [false, false, false];
       gameStopped = false;
       waitingForAnswer = false;
-      isHandlingQuestion = false;
       updateQuestionIndex(0)
      }, score);
     return;
@@ -132,7 +129,6 @@ export const gameSketch = (chosenImg: string, id: string, scoreRowId?: string) =
       hasJumpedOver = [false, false, false];
       gameStopped = false;
       waitingForAnswer = false;
-      isHandlingQuestion = false;
       updateQuestionIndex(0)
     })
     
@@ -249,7 +245,6 @@ export const gameSketch = (chosenImg: string, id: string, scoreRowId?: string) =
       if (!gameStopped) {
         gameStopped = true;
         waitingForAnswer = true
-        isHandlingQuestion = true
         masterMood = 'neutral';
         masterMessage = "Hehe! To continue you need to answer this...";
         //Tar korrekta frågorna och kallar på hanterings funktionen.
@@ -320,8 +315,7 @@ export const gameSketch = (chosenImg: string, id: string, scoreRowId?: string) =
         saveScore(score);
         gameStarted = false; 
         gameStopped = false;
-        waitingForAnswer = false;
-        isHandlingQuestion = false; // Återställ logiken här med
+        waitingForAnswer = false; // Återställ logiken här med
         jumpCount = 0;
         posX = 0;
         laptopsToWin = 2;
@@ -470,7 +464,6 @@ export const gameSketch = (chosenImg: string, id: string, scoreRowId?: string) =
         masterMessage = "Correct! You may pass.";
         gameStopped = false;
         waitingForAnswer = false;
-        isHandlingQuestion = false;
         // reset till 0
         jumpCount = 0;
         // random laptops mellan 1-10
@@ -496,7 +489,6 @@ export const gameSketch = (chosenImg: string, id: string, scoreRowId?: string) =
   laptops = [600, 1000, 1400]
   hasJumpedOver = [false, false, false]
   brokenLaptops = [false, false, false]
-  isHandlingQuestion = false
   
 };
 };
