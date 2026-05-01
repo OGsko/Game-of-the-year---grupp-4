@@ -134,33 +134,33 @@ export default function avatarChoise() {
         let selectedAvatarUrl = "";
 
         try {
-            const avatarData = await fetchAvatar();
+            const availableAvatars = [
+        { url: "avatar1.png" },
+        { url: "avatar2.png" },
+        { url: "avatar3.png" },
+        { url: "avatar4.png" }
+    ];
 
-            if (avatarData && avatarData.length > 0) {
-        // Slice för att bara visa de 4 första img när man väljer avatar
-                avatarData.slice(0, 4).forEach((avatar: Avatar) => {
-                    const img = document.createElement("img");
-            
-                    img.src = avatar.imageUrl;
-                    img.alt = avatar.userName || "avatar";
-                    img.className = "avatarOption";
+    availableAvatars.forEach((avatar) => {
+        const img = document.createElement("img");
+        
+        img.src = avatar.url; 
+        img.alt = "avatar option";
+        img.className = "avatarOption";
 
-                    img.addEventListener("click", () => {
-                        document.querySelectorAll(".avatarOption").forEach(i => i.classList.remove("selected"));
-                        img.classList.add("selected");
-                        selectedAvatarUrl = avatar.imageUrl;
-                    });
+        img.addEventListener("click", () => {
+            document.querySelectorAll(".avatarOption").forEach(i => i.classList.remove("selected"));
+            img.classList.add("selected");
+            selectedAvatarUrl = avatar.url;
+        });
 
-            avatarChoise.append(img);
-                });
-            } else {
-        avatarChoise.textContent = "No avatars available";
-            }
-    
-        } catch (err) {
-            console.error("Could not get avatars:", err);
+        avatarChoise.append(img);
+    });
+
+} catch (err) {
+    console.error("Could not load avatars:", err);
     avatarChoise.textContent = "Images could not load.";
-        }
+}
 
         const saveBtn = document.createElement("button");
         saveBtn.textContent = "Save & Play";
